@@ -1,0 +1,15 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "./globals.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@theme static {
+  --color-stage: #000;
+  --color-ink: #f6f6f6;
+  --color-field: #111;
+  --color-signal: #dedede;
+  --color-muted: #a4a4a4;
+  --color-rule: #303030;
+  --color-control: #202020;
+  --font-data: Menlo, Consolas, "DejaVu Sans Mono", monospace;
+}

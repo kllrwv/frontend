@@ -1,0 +1,146 @@
+@reference "../theme.css";
+
+@layer components {
+  .discovery-input {
+    @apply my-6 flex items-center gap-3 rounded-lg bg-field px-4 text-muted;
+  }
+  .discovery-input svg { @apply shrink-0; }
+  .discovery-input input {
+    @apply min-h-14 min-w-0 flex-1 border-0 bg-transparent text-base text-ink;
+  }
+  .discovery-input input::placeholder { @apply text-muted; }
+  .discovery-input:focus-within { outline: 1px solid var(--color-signal); }
+  .discovery-input input:focus-visible { outline: none; }
+  .discovery-section { @apply my-8; }
+  .discovery-section h2 { @apply mb-3 text-lg leading-tight font-bold tracking-tight; }
+  .discovery-section ul { @apply m-0 list-none p-0; }
+  .discovery-section li { @apply border-0 border-b border-solid border-rule; }
+  .discovery-tag {
+    @apply grid min-h-16 w-full grid-cols-[auto_1fr_auto] items-center gap-3 border-0 bg-stage px-2 py-2 text-left text-muted no-underline;
+  }
+  .discovery-tag:hover { @apply bg-field text-ink; }
+  .tag-mark {
+    @apply inline-grid size-10 shrink-0 place-items-center rounded-sm bg-control text-ink;
+  }
+  .tag-text { @apply grid min-w-0 gap-1; }
+  .tag-text strong { @apply text-base text-ink break-all; }
+  .tag-text small, .discovery-person span:not(.social-avatar) { @apply text-sm text-muted; }
+  .discovery-person { @apply flex min-h-16 flex-wrap items-center gap-3 px-2 py-2; }
+  .discovery-person > div { @apply grid min-w-0 flex-1 gap-1 break-words; }
+  .discovery-person .social-secondary { @apply shrink-0; }
+  .tag-back {
+    @apply inline-flex min-h-11 basis-full items-center gap-2 border-0 bg-transparent p-0 text-left text-sm text-muted no-underline;
+  }
+  .tag-back:hover { @apply text-ink; }
+  .social-heading:has(.tag-back) { @apply mb-6; }
+  .social-heading:has(.tag-back) h1 { @apply break-all; }
+  .inline-hashtag, .inline-mention {
+    @apply border-0 bg-transparent p-0 text-ink underline decoration-muted underline-offset-4;
+    overflow-wrap: anywhere;
+    text-align: start;
+  }
+  .inline-hashtag:hover, .inline-mention:hover { @apply decoration-ink; }
+  .mention-suggestions {
+    @apply m-0 grid min-w-0 list-none rounded-sm border border-solid border-rule bg-field p-1;
+  }
+  .mention-suggestions li {
+    @apply flex min-h-11 cursor-pointer flex-wrap items-center gap-x-2 rounded-xs px-2 py-1 text-sm text-muted;
+    overflow-wrap: anywhere;
+  }
+  .mention-suggestions li strong { @apply text-ink; }
+  .mention-suggestions li:hover, .mention-suggestions li[aria-selected="true"] { @apply bg-control; }
+
+  .composer-tools { @apply flex-wrap; }
+  .draft-attachments { @apply mt-3 grid gap-2; }
+  .draft-attachment {
+    @apply flex min-w-0 items-center gap-3 rounded-sm bg-control pl-3 text-sm text-signal;
+  }
+  .draft-attachment > span { @apply min-w-0 flex-1 truncate; }
+  .draft-attachment img { @apply size-9 shrink-0 rounded-xs object-cover; }
+
+  .post-media { @apply mt-3 grid gap-3; }
+  .post-media > .post-image { @apply m-0; }
+  .post-card > .post-media, .post-card > .post-poll { margin-inline-start: var(--content-inset); }
+  .media-player {
+    @apply min-w-0 overflow-hidden rounded-md border border-solid border-rule bg-field text-ink;
+  }
+  .media-player:fullscreen {
+    @apply flex flex-col justify-center rounded-none border-0 bg-stage;
+  }
+  .media-player:fullscreen .video-stage { @apply min-h-0 flex-1; }
+  .media-player:fullscreen video { max-height: calc(100dvh - 64px); }
+  .video-stage { @apply relative grid place-items-center overflow-hidden bg-stage; }
+  .video-stage video { @apply block w-full object-contain; aspect-ratio: 16 / 9; max-height: 64svh; }
+  .video-toggle { @apply absolute inset-0 grid place-items-center border-0 bg-transparent text-ink; }
+  .video-toggle span {
+    @apply grid size-12 place-items-center rounded-full bg-stage/80;
+    transition: opacity 170ms ease-out;
+  }
+  .video-toggle[data-playing="true"]:not(:hover):not(:focus-visible) span { @apply opacity-0; }
+  .video-toggle:focus-visible { outline-offset: -4px; }
+  .audio-title { @apply flex items-center gap-3 px-3 pt-3 text-sm; }
+  .audio-title svg { @apply shrink-0 text-muted; }
+  .audio-title strong { @apply min-w-0 truncate; }
+  .media-control-bar { @apply flex items-center gap-1 px-1 py-1 sm:gap-2; }
+  .media-control-bar .icon-action { @apply size-11; }
+  .media-control-bar .media-time { @apply shrink-0 font-data text-xs text-muted; }
+  .media-seek { @apply h-8 min-w-0 flex-1 cursor-pointer appearance-none bg-transparent; }
+  .media-seek:disabled { cursor: default; }
+  .media-seek::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--color-signal) var(--progress), var(--color-rule) var(--progress));
+  }
+  .media-seek::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--color-signal) var(--progress), var(--color-rule) var(--progress));
+  }
+  .media-seek::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    margin-top: -4px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-ink);
+  }
+  .media-seek::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--color-ink); }
+  .media-error { @apply px-3 pb-2; }
+
+  .poll-editor { @apply relative mt-4 grid min-w-0 gap-3 rounded-md border border-solid border-rule px-3 pb-3; }
+  .poll-editor legend { @apply px-1 text-sm font-bold text-ink; }
+  .poll-remove { @apply absolute top-0 right-1; }
+  .poll-editor > .content-field { @apply mr-11; }
+  .content-field { @apply grid min-w-0 gap-1 text-sm text-muted; }
+  .content-field input, .content-field select {
+    @apply min-h-11 w-full rounded-sm border border-solid border-rule bg-control px-2 text-ink;
+    font: inherit;
+  }
+  .poll-option-fields { @apply grid gap-2; }
+  .poll-editor-option { @apply flex items-end gap-2; }
+  .poll-editor-option .content-field { @apply grow; }
+  .poll-editor-footer { @apply flex flex-wrap items-end gap-2; }
+  .post-poll { @apply mt-3 rounded-md border border-solid border-rule bg-field p-3; }
+  .poll-caption { @apply flex items-center gap-2 text-sm text-muted; }
+  .post-poll h3 { @apply my-3 text-base font-bold; }
+  .poll-choices { @apply m-0 grid list-none gap-2 p-0; }
+  .poll-choices button, .poll-result {
+    @apply relative flex min-h-11 items-center justify-between gap-2 overflow-hidden rounded-sm border border-solid border-rule bg-stage px-3 py-2 text-left text-sm leading-normal text-ink;
+  }
+  .poll-choices button:hover { @apply border-muted bg-control; }
+  .poll-result::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--votes);
+    background: var(--color-control);
+  }
+  .poll-result span { @apply relative inline-flex items-center gap-2; }
+  .poll-percentage, .poll-meta { @apply font-data text-xs text-muted; }
+  .poll-meta { @apply mt-3 flex flex-wrap gap-x-4 gap-y-1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .video-toggle span { transition: none; }
+  }
+}

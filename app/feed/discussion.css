@@ -1,0 +1,68 @@
+@reference "../theme.css";
+
+@layer components {
+  .post-page-heading {
+    @apply mb-5 flex items-center justify-start gap-2 pb-3;
+  }
+
+  .post-page-heading h1 { @apply m-0 pb-0; }
+  .post-page-heading .post-back { @apply text-ink; }
+  .post-detail { @apply rounded-lg border border-solid border-rule bg-field; }
+
+  .post-detail > .post-card {
+    --content-inset: 0px;
+    @apply px-5 pt-5 pb-3;
+  }
+
+  .post-detail .post-card > .post-body { @apply mt-4; }
+  .discussion { scroll-margin-top: 16px; }
+  .discussion-head {
+    @apply flex flex-wrap items-center justify-between gap-2 border-0 border-b border-solid border-rule px-5 py-2;
+  }
+  .discussion-head h2 { @apply m-0 text-base font-bold tracking-tight; }
+  .discussion-sort {
+    @apply min-h-10 max-w-full rounded-sm border border-solid border-rule bg-stage px-2 text-sm text-ink;
+  }
+  .discussion-state { @apply px-5 py-4 text-sm text-muted; }
+  .discussion-state .social-secondary { @apply mt-2; }
+
+  .comment-list { @apply m-0 list-none px-5 py-0; }
+  .comment {
+    @apply grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 border-0 border-b border-solid border-rule py-3;
+  }
+  .comment:last-child { @apply border-b-0; }
+  .comment .social-avatar { @apply size-8; }
+  .comment .social-avatar svg { @apply size-4; }
+  .comment-content > header { @apply flex flex-wrap items-baseline gap-x-3 gap-y-1; }
+  .comment-content .post-author, .comment-content .post-author > span { @apply text-sm; }
+  .comment-content time { @apply font-data text-xs text-muted; }
+  .comment-body {
+    @apply mt-1.5 mb-0 text-sm leading-relaxed whitespace-pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .comment .post-image { @apply mt-2 max-h-60; }
+  .comment-content > footer { @apply mt-1 flex flex-wrap items-center justify-between gap-x-3; }
+  .comment-reply {
+    @apply min-h-9 rounded-sm border-0 bg-transparent px-1 text-sm text-muted;
+  }
+  .comment-reply:hover { @apply text-ink; }
+  .comment-like { @apply min-h-9; }
+
+  .comment-composer {
+    @apply sticky bottom-0 z-20 rounded-b-lg border-0 border-t border-solid border-rule bg-field p-3;
+  }
+  .comment-composer .draft-attachments { @apply mx-0 mt-0 mb-2; }
+  .comment-input-row { @apply flex items-center gap-2; }
+  .comment-input-row textarea {
+    @apply min-h-12 min-w-0 flex-1 resize-y rounded-md border border-solid border-rule bg-stage px-3 py-2 text-sm text-ink;
+    max-height: 14rem;
+  }
+  .comment-input-row textarea::placeholder { @apply text-muted; }
+  .comment-send { @apply size-11 shrink-0 p-0; }
+
+  @media (max-width: 44rem) {
+    .post-detail > .post-card, .discussion-head, .comment-list, .discussion-state { @apply px-3; }
+    .post-page-heading { @apply mb-3; }
+    .comment-composer { bottom: var(--mobile-nav-space, 0px); }
+  }
+}

@@ -1,0 +1,133 @@
+@reference "../theme.css";
+
+@layer components {
+  .social-shell[data-theme="light"] {
+    --color-stage: #f7f7f7;
+    --color-ink: #181818;
+    --color-muted: #555;
+    --color-field: #eee;
+    --color-control: #e3e3e3;
+    --color-signal: #292929;
+    --color-rule: #c4c4c4;
+    --danger-text: #a51e25;
+    --focus: #444;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: light) {
+    .social-shell[data-theme="system"] {
+      --color-stage: #f7f7f7;
+      --color-ink: #181818;
+      --color-muted: #555;
+      --color-field: #eee;
+      --color-control: #e3e3e3;
+      --color-signal: #292929;
+      --color-rule: #c4c4c4;
+      --danger-text: #a51e25;
+      --focus: #444;
+      color-scheme: light;
+    }
+  }
+  .social-shell[data-theme="light"] .social-wordmark img,
+  .social-shell[data-theme="light"] .social-error { filter: invert(1); }
+  @media (prefers-color-scheme: light) {
+    .social-shell[data-theme="system"] .social-wordmark img,
+    .social-shell[data-theme="system"] .social-error { filter: invert(1); }
+  }
+
+  .profile-overview { @apply mb-6; }
+  .profile-banner {
+    @apply relative rounded-md border border-solid border-rule bg-field;
+    aspect-ratio: 25 / 8;
+    background-image: repeating-linear-gradient(150deg, transparent 0 12px, color-mix(in srgb, var(--color-muted), transparent 91%) 12px 13px);
+  }
+  .profile-banner > img { @apply absolute inset-0 size-full rounded-md object-cover; }
+  .banner-menu { @apply absolute top-2 right-2; z-index: 3; }
+  .banner-menu summary { @apply bg-field text-ink; }
+  .profile-overview .post-menu button {
+    @apply flex items-center gap-2 whitespace-nowrap;
+  }
+  .profile-identity { @apply relative flex items-end justify-between gap-3; margin: -24px 0 12px; }
+  .profile-avatar { @apply size-20 border-4 border-solid border-stage sm:size-24; }
+  .profile-actions { @apply flex flex-wrap items-center justify-end gap-2; }
+  .profile-overview h1 { @apply text-3xl leading-tight font-bold tracking-tight break-words sm:text-4xl; }
+  .profile-handle { @apply mt-1 break-all text-sm text-muted; }
+  .profile-bio { @apply mt-3 leading-relaxed whitespace-pre-wrap break-words; }
+  .profile-facts { @apply my-3 flex flex-wrap gap-x-5 gap-y-2 text-sm; }
+  .profile-facts > div { @apply flex flex-row-reverse items-baseline gap-2; }
+  .profile-facts dd { @apply m-0 font-data text-ink; }
+  .profile-facts dt, .profile-dates { @apply text-muted; }
+  .profile-dates { @apply flex flex-wrap gap-x-4 gap-y-1 text-sm; }
+  .profile-switch {
+    @apply border-0 border-b border-solid border-rule;
+  }
+  .profile-switch + .timeline-posts { @apply mt-4; }
+  .profile-author-link { @apply border-0 bg-transparent p-0 text-left font-bold text-ink no-underline; overflow-wrap: anywhere; }
+  .profile-author-link:hover { @apply underline underline-offset-4; }
+
+  .profile-settings-dialog { width: min(calc(100% - 24px), 820px); }
+  .profile-settings {
+    @apply grid grid-cols-[176px_minmax(0,1fr)] items-start gap-4;
+    min-height: min(448px, 65svh);
+  }
+  .profile-settings > nav { @apply grid gap-1 py-3; }
+  .profile-settings > nav > button {
+    @apply flex min-h-11 items-center gap-2 rounded-sm border-0 bg-transparent px-3 text-left text-sm font-medium text-muted;
+  }
+  .profile-settings > nav > button:hover,
+  .profile-settings > nav > button[aria-pressed="true"] { @apply bg-control text-ink; }
+  .settings-panel {
+    @apply min-w-0 border-0 border-l border-solid border-rule pl-4;
+    min-height: 100%;
+  }
+  .settings-panel h3 { @apply my-4 text-xl leading-tight font-bold tracking-tight; }
+  .settings-stack h4 { @apply mb-0 text-base font-bold; }
+  .settings-stack { @apply grid min-w-0 items-start gap-3; }
+  .settings-row {
+    @apply flex min-h-14 min-w-0 flex-wrap items-center justify-between gap-3 border-0 border-b border-solid border-rule py-2;
+  }
+  .settings-row input:not([type="checkbox"]):not([type="file"]), .settings-row select, .settings-stack textarea {
+    @apply min-h-11 max-w-full rounded-sm border border-solid border-rule bg-control px-3 py-2 text-ink;
+    font: inherit;
+  }
+  .settings-row select { @apply max-w-full; }
+  .settings-row p, .settings-form p { @apply mt-1 text-sm leading-relaxed text-muted; }
+  .settings-row p { @apply break-all; }
+  .settings-form p { overflow-wrap: anywhere; text-wrap: pretty; }
+  .settings-row input[type="checkbox"] { @apply size-6 shrink-0 cursor-pointer accent-signal; }
+  .settings-avatar { @apply justify-start; }
+  .settings-avatar > div { @apply flex flex-wrap items-center gap-2; }
+  .settings-file { @apply relative cursor-pointer; }
+  .settings-file input { @apply absolute inset-0 w-full cursor-pointer opacity-0; }
+  .settings-file:focus-within { outline: 2px solid var(--color-muted); }
+  .settings-form { @apply grid gap-3 rounded-sm border border-solid border-rule bg-stage p-3; }
+  .settings-form .dialog-actions { @apply mt-0; }
+  .account-delete-actions { @apply grid w-full grid-cols-2 justify-self-end sm:w-auto; }
+  .account-delete-actions > button { @apply min-w-0 px-2 text-center sm:px-4; }
+  .settings-feedback { @apply my-2 font-data text-xs text-muted; }
+  .account-delete { @apply mt-3; }
+  .session-list { @apply m-0 grid list-none gap-2 p-0; }
+  .session-list > li { @apply flex min-w-0 flex-wrap items-center gap-3 rounded-sm bg-control p-3; }
+  .session-list > li > div { @apply min-w-0 flex-1 break-all; }
+  .session-list > li p, .session-list > li small { @apply text-sm text-muted; }
+
+  .notice-count { @apply ml-auto rounded-sm bg-ink px-1 text-xs tabular-nums text-stage; }
+  .notification-list ul { @apply m-0 list-none p-0; }
+  .notification-list li { @apply border-0 border-b border-solid border-rule; }
+  .notice-row {
+    @apply grid min-h-18 w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-0 bg-transparent p-3 text-left text-ink no-underline;
+  }
+  .notice-row:hover, .notification-list li[data-unread="true"] { @apply bg-field; }
+  .notice-avatar { @apply relative; }
+  .notice-icon {
+    @apply absolute -right-1 -bottom-1 grid size-6 place-items-center rounded-full border-2 border-solid border-field bg-ink text-stage;
+  }
+  .notice-text { @apply grid gap-1 leading-relaxed; }
+  .notice-text time { @apply font-data text-xs text-muted; }
+  .notice-dot { @apply size-1.5 shrink-0 rounded-full bg-ink; }
+  @media (max-width: 44rem) {
+    .profile-settings { @apply grid-cols-1 gap-0; }
+    .profile-settings > nav { @apply flex flex-wrap gap-1; }
+    .profile-settings > nav > button { @apply px-2; }
+    .settings-panel { @apply border-0 border-t border-solid border-rule pl-0; }
+  }
+}
