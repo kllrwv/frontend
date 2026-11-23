@@ -1,19 +1,15 @@
 @reference "../theme.css";
-
 @layer components {
   .post-page-heading {
     @apply mb-5 flex items-center justify-start gap-2 pb-3;
   }
-
   .post-page-heading h1 { @apply m-0 pb-0; }
   .post-page-heading .post-back { @apply text-ink; }
   .post-detail { @apply rounded-lg border border-solid border-rule bg-field; }
-
   .post-detail > .post-card {
     --content-inset: 0px;
     @apply px-5 pt-5 pb-3;
   }
-
   .post-detail .post-card > .post-body { @apply mt-4; }
   .discussion { scroll-margin-top: 16px; }
   .discussion-head {
@@ -25,7 +21,6 @@
   }
   .discussion-state { @apply px-5 py-4 text-sm text-muted; }
   .discussion-state .social-secondary { @apply mt-2; }
-
   .comment-list { @apply m-0 list-none px-5 py-0; }
   .comment {
     @apply grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 border-0 border-b border-solid border-rule py-3;
@@ -47,7 +42,6 @@
   }
   .comment-reply:hover { @apply text-ink; }
   .comment-like { @apply min-h-9; }
-
   .comment-composer {
     @apply sticky bottom-0 z-20 rounded-b-lg border-0 border-t border-solid border-rule bg-field p-3;
   }
@@ -59,7 +53,6 @@
   }
   .comment-input-row textarea::placeholder { @apply text-muted; }
   .comment-send { @apply size-11 shrink-0 p-0; }
-
   @media (max-width: 44rem) {
     .post-detail > .post-card, .discussion-head, .comment-list, .discussion-state { @apply px-3; }
     .post-page-heading { @apply mb-3; }

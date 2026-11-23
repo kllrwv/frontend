@@ -1,5 +1,4 @@
 "use client";
-
 import { useRef, useState, type FormEvent } from "react";
 import { Heart, Paperclip, Send } from "lucide-react";
 import { api } from "../lib/api";
@@ -9,9 +8,7 @@ import { LinkedText } from "../ui/mentions";
 import { DraftAttachment, PostAttachments, fileAccept, validAttachments } from "./media-player";
 import { AuthorLine, Avatar, PostImage } from "./posts";
 import { errorText, publish, useFeed, type Post } from "./post-data";
-
 type Order = "popular" | "recent" | "oldest";
-
 export function Discussion({ postId, lang, onPublished, readOnly }: {
   postId: string; readOnly?: boolean; lang: Lang; onPublished: () => void;
 }) {
@@ -30,7 +27,6 @@ export function Discussion({ postId, lang, onPublished, readOnly }: {
   const input = useRef<HTMLTextAreaElement>(null);
   const draftId = useRef("");
   const date = new Intl.DateTimeFormat(lang, { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
-
   function attach(files: File[]) {
     if (!validAttachments(files)) {
       setError(site.errors.post_media_invalid);
@@ -40,7 +36,6 @@ export function Discussion({ postId, lang, onPublished, readOnly }: {
     draftId.current = "";
     setAttachments(files);
   }
-
   function replyTo(username: string) {
     const mention = `@${username} `;
     if (!body.startsWith(mention) && mention.length + body.length <= 1000) {
@@ -49,7 +44,6 @@ export function Discussion({ postId, lang, onPublished, readOnly }: {
     }
     input.current?.focus();
   }
-
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (sending || (!body.trim() && !attachments.length)) return;
@@ -66,7 +60,6 @@ export function Discussion({ postId, lang, onPublished, readOnly }: {
     } catch (cause) { setError(errorText(lang, cause)); }
     finally { setSending(false); }
   }
-
   async function toggleLike(id: string, liked: boolean) {
     if (liking) return;
     setLiking(id);
@@ -79,7 +72,6 @@ export function Discussion({ postId, lang, onPublished, readOnly }: {
     } catch (cause) { setLikeError(errorText(lang, cause)); }
     finally { setLiking(null); }
   }
-
   return <section className="discussion" id="comments" aria-labelledby="discussion-title">
     <header className="discussion-head">
       <h2 id="discussion-title">{t.comments}</h2>

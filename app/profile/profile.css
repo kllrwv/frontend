@@ -1,5 +1,4 @@
 @reference "../theme.css";
-
 @layer components {
   .social-shell[data-theme="light"] {
     --color-stage: #f7f7f7;
@@ -33,7 +32,6 @@
     .social-shell[data-theme="system"] .social-wordmark img,
     .social-shell[data-theme="system"] .social-error { filter: invert(1); }
   }
-
   .profile-overview { @apply mb-6; }
   .profile-banner {
     @apply relative rounded-md border border-solid border-rule bg-field;
@@ -63,7 +61,6 @@
   .profile-switch + .timeline-posts { @apply mt-4; }
   .profile-author-link { @apply border-0 bg-transparent p-0 text-left font-bold text-ink no-underline; overflow-wrap: anywhere; }
   .profile-author-link:hover { @apply underline underline-offset-4; }
-
   .profile-settings-dialog { width: min(calc(100% - 24px), 820px); }
   .profile-settings {
     @apply grid grid-cols-[176px_minmax(0,1fr)] items-start gap-4;
@@ -109,7 +106,6 @@
   .session-list > li { @apply flex min-w-0 flex-wrap items-center gap-3 rounded-sm bg-control p-3; }
   .session-list > li > div { @apply min-w-0 flex-1 break-all; }
   .session-list > li p, .session-list > li small { @apply text-sm text-muted; }
-
   .notice-count { @apply ml-auto rounded-sm bg-ink px-1 text-xs tabular-nums text-stage; }
   .notification-list ul { @apply m-0 list-none p-0; }
   .notification-list li { @apply border-0 border-b border-solid border-rule; }

@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Hash, Search, UserRound } from "lucide-react";
@@ -7,11 +6,9 @@ import { api, ApiError } from "../lib/api";
 import { copy, type Lang } from "../lib/locale";
 import { profilePath, tagPath } from "../lib/paths";
 import { Verified } from "../ui/verified";
-
 type Tag = { tag: string; posts: number };
 type Person = { id: string; username: string; name: string; avatar: boolean; followed: boolean; mine: boolean; verified?: boolean; deleted?: boolean };
 type Results = { tags: Tag[]; people: Person[] };
-
 export function Discovery({ lang, initialQuery }: {
   lang: Lang; initialQuery: string;
 }) {
@@ -25,7 +22,6 @@ export function Discovery({ lang, initialQuery }: {
   const [error, setError] = useState("");
   const [revision, refresh] = useState(0);
   const data = results?.term === term ? results.data : null;
-
   useEffect(() => {
     const request = new AbortController();
     setFailed(null);
@@ -36,7 +32,6 @@ export function Discovery({ lang, initialQuery }: {
     }, term ? 180 : 0);
     return () => { window.clearTimeout(timer); request.abort(); };
   }, [term, revision]);
-
   async function toggleFollow(person: Person) {
     if (working) return;
     setWorking(person.id);
@@ -50,7 +45,6 @@ export function Discovery({ lang, initialQuery }: {
       setError(site.errors[code as keyof typeof site.errors] ?? site.errors.unavailable);
     } finally { setWorking(null); }
   }
-
   return <>
     <label className="discovery-input">
       <Search size={20} aria-hidden="true" />

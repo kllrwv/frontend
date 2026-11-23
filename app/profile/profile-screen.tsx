@@ -1,5 +1,4 @@
 "use client";
-
 import { useRef, useState } from "react";
 import { Brush, Ellipsis, ImagePlus, Pencil, ShieldBan, Trash2, UserRound } from "lucide-react";
 import { api } from "../lib/api";
@@ -10,7 +9,6 @@ import { Drawing } from "../feed/drawing";
 import { copy, type Lang } from "../lib/locale";
 import { LinkedText } from "../ui/mentions";
 import { readableError, type ProfileView } from "./profile-data";
-
 export function ProfileHead({ data, lang, revision, edit, changed, blocked, access }: {
   data: ProfileView; lang: Lang; revision: number; edit: () => void; changed: () => void; blocked: () => void; access?: Access;
 }) {
@@ -32,7 +30,6 @@ export function ProfileHead({ data, lang, revision, edit, changed, blocked, acce
   const presence = data.last_seen === null ? null :
     Date.now() - data.last_seen * 1000 < 150_000 ? t.online :
       t.seen.replace("{date}", new Intl.DateTimeFormat(lang, { dateStyle: "short", timeStyle: "short" }).format(data.last_seen * 1000).toLowerCase());
-
   async function perform(action: () => Promise<unknown>, done = changed) {
     if (busy) return;
     setBusy(true);
@@ -41,13 +38,11 @@ export function ProfileHead({ data, lang, revision, edit, changed, blocked, acce
     catch (cause) { setError(readableError(lang, cause)); }
     finally { setBusy(false); }
   }
-
   function upload(file: File) {
     const form = new FormData();
     form.set("banner", file);
     return perform(() => api("profile/banner", form));
   }
-
   return <header className="profile-overview">
     <div className="profile-banner">
       {data.banner && <img src={`/api/accounts/${data.id}/banner?v=${data.banner}`} alt={t.banner} />}

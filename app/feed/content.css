@@ -1,5 +1,4 @@
 @reference "../theme.css";
-
 @layer components {
   .discovery-input {
     @apply my-6 flex items-center gap-3 rounded-lg bg-field px-4 text-muted;
@@ -49,7 +48,6 @@
   }
   .mention-suggestions li strong { @apply text-ink; }
   .mention-suggestions li:hover, .mention-suggestions li[aria-selected="true"] { @apply bg-control; }
-
   .composer-tools { @apply flex-wrap; }
   .draft-attachments { @apply mt-3 grid gap-2; }
   .draft-attachment {
@@ -57,7 +55,6 @@
   }
   .draft-attachment > span { @apply min-w-0 flex-1 truncate; }
   .draft-attachment img { @apply size-9 shrink-0 rounded-xs object-cover; }
-
   .post-media { @apply mt-3 grid gap-3; }
   .post-media > .post-image { @apply m-0; }
   .post-card > .post-media, .post-card > .post-poll { margin-inline-start: var(--content-inset); }
@@ -107,7 +104,6 @@
   }
   .media-seek::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--color-ink); }
   .media-error { @apply px-3 pb-2; }
-
   .poll-editor { @apply relative mt-4 grid min-w-0 gap-3 rounded-md border border-solid border-rule px-3 pb-3; }
   .poll-editor legend { @apply px-1 text-sm font-bold text-ink; }
   .poll-remove { @apply absolute top-0 right-1; }
@@ -139,7 +135,6 @@
   .poll-result span { @apply relative inline-flex items-center gap-2; }
   .poll-percentage, .poll-meta { @apply font-data text-xs text-muted; }
   .poll-meta { @apply mt-3 flex flex-wrap gap-x-4 gap-y-1; }
-
   @media (prefers-reduced-motion: reduce) {
     .video-toggle span { transition: none; }
   }

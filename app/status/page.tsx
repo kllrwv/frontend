@@ -1,17 +1,14 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { Activity, RotateCw } from "lucide-react";
 import { api } from "../lib/api";
 import { copy, storedLanguage, type Lang } from "../lib/locale";
-
 const SERVICES = ["database", "auth", "feed", "media"] as const;
 type Service = typeof SERVICES[number];
 type Health = "ok" | "slow" | "down" | "unknown";
 type Sample = { service: Service; minute: number; state: Exclude<Health, "unknown"> };
 type Status = { minute: number; current: Sample[]; history: Sample[] };
 const WEIGHT: Record<Health, number> = { unknown: 0, ok: 1, slow: 2, down: 3 };
-
 export default function StatusPage() {
   const [lang, setLang] = useState<Lang>("ru");
   const [status, setStatus] = useState<Status | null>(null);
@@ -20,13 +17,11 @@ export default function StatusPage() {
   const [refresh, setRefresh] = useState(0);
   const site = copy[lang];
   const t = site.social;
-
   useEffect(() => { setLang(storedLanguage()); }, []);
   useEffect(() => {
     document.documentElement.lang = lang;
     document.title = `${t.status} · ${site.brand}`;
   }, [lang, t.status, site.brand]);
-
   useEffect(() => {
     let request: AbortController | null = null;
     function load() {
@@ -45,7 +40,6 @@ export default function StatusPage() {
     const timer = window.setInterval(load, 60_000);
     return () => { window.clearInterval(timer); request?.abort(); };
   }, [refresh]);
-
   const worst = status?.current.reduce<Health>((state, item) =>
     WEIGHT[item.state] > WEIGHT[state] ? item.state : state, "unknown");
   const state: Health = unreachable ? "down" : worst ?? "unknown";
@@ -54,7 +48,6 @@ export default function StatusPage() {
   const percentage = new Intl.NumberFormat(lang, { style: "percent", maximumFractionDigits: 1 });
   const now = status?.minute;
   const buckets = 48;
-
   return <main className="status-shell">
     <header className="status-header">
       <a href="/" className="social-wordmark"><img src="/logo.svg" alt="" width={27} height={27} />{site.feedBrand}</a>

@@ -1,20 +1,16 @@
 "use client";
-
 import { useEffect, useState, type CSSProperties } from "react";
 import { ChartNoAxesColumn, Check, Plus, X } from "lucide-react";
 import { api, ApiError } from "../lib/api";
 import { copy, type Lang } from "../lib/locale";
-
 export type PollDraft = { question: string; options: string[]; duration: number | null };
 export type Poll = { question: string; ends_at: number | null; closed: boolean; selected: number | null; total: number;
   options: { position: number; label: string; votes: number }[] };
 export const initialPoll: PollDraft = { question: "", options: ["", ""], duration: 24 };
-
 export function validPoll(poll: PollDraft) {
   const options = poll.options.map(option => option.trim().toLowerCase());
   return poll.question.trim().length > 0 && options.every(Boolean) && new Set(options).size === options.length;
 }
-
 export function PollEditor({ value, onChange, remove, lang, disabled }: {
   value: PollDraft; onChange: (value: PollDraft) => void; remove: () => void; lang: Lang; disabled: boolean;
 }) {
@@ -48,7 +44,6 @@ export function PollEditor({ value, onChange, remove, lang, disabled }: {
     </div>
   </fieldset>;
 }
-
 export function PollCard({ id, value, lang, interactive, updated }: {
   id: string; value: Poll; lang: Lang; interactive?: boolean; updated?: (value: Poll) => void;
 }) {
@@ -60,7 +55,6 @@ export function PollCard({ id, value, lang, interactive, updated }: {
   const closed = value.closed || expired;
   const results = closed || value.selected !== null;
   const date = value.ends_at === null ? null : new Intl.DateTimeFormat(lang, { dateStyle: "medium", timeStyle: "short" }).format(value.ends_at * 1000).toLowerCase();
-
   useEffect(() => {
     if (value.ends_at === null) { setExpired(false); return; }
     const remaining = value.ends_at * 1000 - Date.now();
@@ -69,7 +63,6 @@ export function PollCard({ id, value, lang, interactive, updated }: {
     const timer = window.setTimeout(() => setExpired(true), remaining);
     return () => window.clearTimeout(timer);
   }, [value.ends_at]);
-
   async function vote(option: number) {
     if (busy || results || !interactive) return;
     setBusy(true);
@@ -82,7 +75,6 @@ export function PollCard({ id, value, lang, interactive, updated }: {
       if (code === "poll_closed") setExpired(true);
     } finally { setBusy(false); }
   }
-
   return <section className="post-poll" aria-label={t.poll}>
     <div className="poll-caption"><ChartNoAxesColumn size={16} aria-hidden="true" />{t.poll}</div>
     <h3>{value.question}</h3>

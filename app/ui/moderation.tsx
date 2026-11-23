@@ -1,17 +1,13 @@
 "use client";
-
 import { useState, type FormEvent } from "react";
 import { api } from "../lib/api";
 import { copy, type Lang } from "../lib/locale";
 import { errorText, type Post } from "../feed/post-data";
 import { Dialog } from "./dialog";
-
 type Kind = keyof (typeof copy)[Lang]["admin"]["kinds"];
-
 export type Access = { origin: string | null; moderate: boolean; manage_accounts: boolean };
 export type Target = { kind: Kind; id: string; part?: number; title?: string };
 export type Mode = "report" | "remove";
-
 export function targetsFor(post: Post, comment = false): Target[] {
   const targets: Target[] = [{ kind: comment ? "comment" : "post", id: post.id }];
   if (post.poll && !post.poll_deleted) targets.push({ kind:"poll", id:post.id });
@@ -20,7 +16,6 @@ export function targetsFor(post: Post, comment = false): Target[] {
   }
   return targets;
 }
-
 export function ContentDialog({ targets, lang, mode, own, close, changed }: {
   targets: Target[]; lang: Lang; mode: Mode; own?: boolean; close: () => void; changed?: () => void;
 }) {

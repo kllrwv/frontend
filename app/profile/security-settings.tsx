@@ -1,12 +1,10 @@
 "use client";
-
 import { useEffect, useState, type FormEvent } from "react";
 import { Monitor, X } from "lucide-react";
 import { api, ApiError } from "../lib/api";
 import { copy, type Lang } from "../lib/locale";
 import { readableError, useResource } from "./profile-data";
 import { AuthenticatorSettings } from "./authenticator-settings";
-
 type Device = { id: string; device: string | null; last_seen: number; current: boolean };
 type Security = {
   email: string | null; phone_tail: string | null; phone_linked?: boolean; telegram_linked?: boolean;
@@ -14,7 +12,6 @@ type Security = {
 };
 type Mode = "email" | "phone" | "password";
 type Challenge = { kind: "email" | "phone"; id: string; url?: string };
-
 export function SecuritySettings({ lang }: { lang: Lang }) {
   const site = copy[lang];
   const t = site.profiles;
@@ -26,7 +23,6 @@ export function SecuritySettings({ lang }: { lang: Lang }) {
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const reload = info.reload;
-
   useEffect(() => {
     if (challenge?.kind !== "phone") return;
     const challengeId = challenge.id;
@@ -55,7 +51,6 @@ export function SecuritySettings({ lang }: { lang: Lang }) {
     void check();
     return () => { request.abort(); window.clearTimeout(timer); };
   }, [challenge, lang, reload, site.errors.contact_unavailable]);
-
   async function run(action: () => Promise<void>) {
     if (busy) return;
     setBusy(true);
@@ -65,14 +60,12 @@ export function SecuritySettings({ lang }: { lang: Lang }) {
     catch (cause) { setError(readableError(lang, cause)); }
     finally { setBusy(false); }
   }
-
   function done() {
     setChallenge(null);
     setMode(null);
     setSaved(true);
     reload();
   }
-
   function closeForm() {
     void run(async () => {
       if (challenge) await api(`settings/contact/${challenge.id}/cancel`, {});
@@ -80,7 +73,6 @@ export function SecuritySettings({ lang }: { lang: Lang }) {
       setMode(null);
     });
   }
-
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = Object.fromEntries(new FormData(event.currentTarget));
@@ -100,11 +92,9 @@ export function SecuritySettings({ lang }: { lang: Lang }) {
       }
     });
   }
-
   function revoke(id?: string) {
     void run(async () => { await api("settings/sessions/revoke", { id: id ?? null }); reload(); setSaved(true); });
   }
-
   if (info.error) return <div className="settings-stack">
     <p role="alert" className="social-error">{readableError(lang, info.error)}</p>
     <button type="button" className="social-secondary" onClick={reload}>{social.retry}</button>
@@ -118,7 +108,6 @@ export function SecuritySettings({ lang }: { lang: Lang }) {
     { kind: "email", label: t.email, value: info.data.email ?? t.contactNotLinked, action: t.changeEmail },
     { kind: "password", label: t.password, value: null, action: t.changePassword },
   ] as const;
-
   return <div className="settings-stack">
     {rows.map(row => <div className="settings-row" key={row.kind}>
       <div><strong>{row.label}</strong>{row.value && <p>{row.value}</p>}</div>

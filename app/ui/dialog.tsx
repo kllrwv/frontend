@@ -1,8 +1,6 @@
 "use client";
-
 import { useEffect, useId, useRef, type ReactNode } from "react";
 import { X } from "lucide-react";
-
 export function Dialog({ title, close, closeLabel, children, wide = false, className = "" }: {
   title: string; close: () => void; closeLabel: string; children: ReactNode; wide?: boolean; className?: string;
 }) {

@@ -1,17 +1,14 @@
 "use client";
-
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { Brush, Circle, Eraser, Minus, Redo2, Square, Trash2, Undo2, ZoomIn, ZoomOut } from "lucide-react";
 import { Dialog } from "../ui/dialog";
 import { copy, type Lang } from "../lib/locale";
-
 const SIZE = { width: 1000, height: 625 };
 const TOOLS = { brush: Brush, eraser: Eraser, line: Minus, rectangle: Square, ellipse: Circle };
 const COLORS = ["#131313", "#ffffff", "#f34944", "#ff8521", "#e6b833", "#28a874", "#327dff", "#9350dd", "#eb5594"];
 type Tool = keyof typeof TOOLS;
 type Point = { x: number; y: number };
 type Mark = { tool: Tool; color: string; width: number; points: Point[] };
-
 function renderMark(context: CanvasRenderingContext2D, mark: Mark) {
   const start = mark.points[0];
   const end = mark.points[mark.points.length - 1];
@@ -34,7 +31,6 @@ function renderMark(context: CanvasRenderingContext2D, mark: Mark) {
   }
   context.stroke();
 }
-
 export function Drawing({ lang, close, attach, banner = false }: { lang: Lang; close: () => void; attach: (file: File) => void; banner?: boolean }) {
   const t = copy[lang].social;
   const profile = copy[lang].profiles;
@@ -49,14 +45,12 @@ export function Drawing({ lang, close, attach, banner = false }: { lang: Lang; c
   const [color, setColor] = useState(COLORS[0]);
   const [width, setWidth] = useState(6);
   const [zoom, setZoom] = useState(100);
-
   function paint() {
     const target = canvas.current?.getContext("2d");
     if (!target || !buffer.current) return;
     target.drawImage(buffer.current, 0, 0);
     if (current.current) renderMark(target, current.current);
   }
-
   useEffect(() => {
     if (!buffer.current) {
       buffer.current = document.createElement("canvas");
@@ -70,12 +64,10 @@ export function Drawing({ lang, close, attach, banner = false }: { lang: Lang; c
     for (const mark of history[index]) renderMark(context, mark);
     paint();
   }, [history, index, height]);
-
   function commit(marks: Mark[]) {
     setHistory([...history.slice(Math.max(0, index - 40), index + 1), marks]);
     setIndex(Math.min(index + 1, 41));
   }
-
   function point(event: PointerEvent<HTMLCanvasElement>): Point {
     const box = event.currentTarget.getBoundingClientRect();
     return {
@@ -83,7 +75,6 @@ export function Drawing({ lang, close, attach, banner = false }: { lang: Lang; c
       y: (event.clientY - box.top) / box.height * height,
     };
   }
-
   function begin(event: PointerEvent<HTMLCanvasElement>) {
     if (event.button !== 0 || activePointer.current !== null || history[index].length >= 400) return;
     activePointer.current = event.pointerId;
@@ -91,7 +82,6 @@ export function Drawing({ lang, close, attach, banner = false }: { lang: Lang; c
     current.current = { tool, color, width, points: [point(event)] };
     paint();
   }
-
   function move(event: PointerEvent<HTMLCanvasElement>) {
     const mark = current.current;
     if (activePointer.current !== event.pointerId || !mark) return;
@@ -102,7 +92,6 @@ export function Drawing({ lang, close, attach, banner = false }: { lang: Lang; c
     }
     paint();
   }
-
   function end(event: PointerEvent<HTMLCanvasElement>, commitMark: boolean) {
     if (activePointer.current !== event.pointerId || !current.current) return;
     if (commitMark) {
@@ -119,7 +108,6 @@ export function Drawing({ lang, close, attach, banner = false }: { lang: Lang; c
     activePointer.current = null;
     if (!commitMark) paint();
   }
-
   return <Dialog title={banner ? profile.drawBanner : t.draw} close={close} closeLabel={t.close} wide>
     <div className="drawing-tools">
       <div className="drawing-group">{Object.entries(TOOLS).map(([key, Icon]) => {

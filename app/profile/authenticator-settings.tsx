@@ -1,18 +1,15 @@
 "use client";
-
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Download } from "lucide-react";
 import { api, ApiError } from "../lib/api";
 import { copy, type Lang } from "../lib/locale";
 import { readableError } from "./profile-data";
-
 type Setup = { generation: string; secret: string; uri: string };
 type Screen =
   | { kind: "start" }
   | { kind: "setup"; setup: Setup }
   | { kind: "codes"; codes: string[] }
   | { kind: "disable"; recovery: boolean };
-
 export function AuthenticatorSettings({ lang, enabled, reload }: { lang: Lang; enabled: boolean; reload: () => void }) {
   const [screen, setScreen] = useState<Screen | null>(null);
   const [busy, setBusy] = useState(false);
@@ -20,7 +17,6 @@ export function AuthenticatorSettings({ lang, enabled, reload }: { lang: Lang; e
   const [downloaded, setDownloaded] = useState(false);
   const t = copy[lang];
   const auth = t.authenticator;
-
   async function run(action: () => Promise<void>) {
     setBusy(true);
     setError("");
@@ -34,7 +30,6 @@ export function AuthenticatorSettings({ lang, enabled, reload }: { lang: Lang; e
       }
     } finally { setBusy(false); }
   }
-
   function cancel() {
     if (screen?.kind !== "setup") {
       setScreen(null);
@@ -47,7 +42,6 @@ export function AuthenticatorSettings({ lang, enabled, reload }: { lang: Lang; e
       setScreen(null);
     });
   }
-
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!screen || busy) return;
@@ -70,7 +64,6 @@ export function AuthenticatorSettings({ lang, enabled, reload }: { lang: Lang; e
       }
     });
   }
-
   function download(codes: string[]) {
     const lines = [auth.recoveryFileTitle, "", ...auth.recoverySaveHint, "", ...codes, ""];
     const file = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
@@ -82,9 +75,7 @@ export function AuthenticatorSettings({ lang, enabled, reload }: { lang: Lang; e
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     setDownloaded(true);
   }
-
   const recovery = screen?.kind === "disable" && screen.recovery;
-
   return <>
     <div className="settings-row">
       <div><strong>{auth.name}</strong><p>{enabled ? auth.enabled : auth.disabled}</p></div>
@@ -132,7 +123,6 @@ export function AuthenticatorSettings({ lang, enabled, reload }: { lang: Lang; e
     {error && <p role="alert" className="social-error">{error}</p>}
   </>;
 }
-
 function SetupQr({ uri, label }: { uri: string; label: string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
@@ -143,7 +133,7 @@ function SetupQr({ uri, label }: { uri: string; label: string }) {
       if (active && element) return toCanvas(element, uri, { width: 206, margin: 4 }).then(() => {
         if (active) setReady(true);
       });
-    }).catch(() => { /* The manual setup key is always available. */ });
+    }).catch(() => {});
     return () => { active = false; };
   }, [uri]);
   return <canvas hidden={!ready} ref={canvas} role="img" aria-label={label}

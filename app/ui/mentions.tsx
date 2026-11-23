@@ -1,16 +1,13 @@
 "use client";
-
 import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import Link from "next/link";
 import { api } from "../lib/api";
 import { copy, type Lang } from "../lib/locale";
 import { profilePath, tagPath } from "../lib/paths";
-
 const mentionPattern = /(?<![\p{L}\p{N}_@-])(@[a-zа-яё0-9_-]{3,54})(?![\p{L}\p{N}_-])/giu;
 const fragmentPattern = /(?<![\p{L}\p{N}_@-])@([a-zа-яё0-9_-]{1,54})$/iu;
 const fragmentTail = /^[a-zа-яё0-9_-]*/iu;
 const hashtagPattern = /(?<![\p{L}\p{N}_#])(#(?:[\p{L}\p{N}_]{1,54}))(?![\p{L}\p{N}_])/gu;
-
 export function LinkedText({ value, linkTags = false }: { value: string; linkTags?: boolean }) {
   const pattern = linkTags ? new RegExp(`${mentionPattern.source}|${hashtagPattern.source}`, "giu") : mentionPattern;
   const pieces = [];
@@ -30,10 +27,8 @@ export function LinkedText({ value, linkTags = false }: { value: string; linkTag
   pieces.push(value.slice(offset));
   return <>{pieces}</>;
 }
-
 type Suggestion = { id: string; name: string; username: string };
 type Results = { people: Suggestion[] };
-
 export function MentionField({ label, lang, className, name, value, onChange, rows, maxLength, disabled, placeholderOnly = false, autoGrow = false }: {
   label: string; lang: Lang; className: string; name?: string; value: string; onChange: (value: string) => void;
   rows: number; maxLength: number; disabled: boolean; placeholderOnly?: boolean; autoGrow?: boolean;
@@ -49,7 +44,6 @@ export function MentionField({ label, lang, className, name, value, onChange, ro
   const term = disabled || dismissed ? undefined : fragment?.[1].toLowerCase();
   const people = term && results?.term === term ? results.people : [];
   const activeIndex = Math.min(active, Math.max(0, people.length - 1));
-
   useEffect(() => {
     if (!term) return;
     const request = new AbortController();
@@ -65,13 +59,11 @@ export function MentionField({ label, lang, className, name, value, onChange, ro
     }, 160);
     return () => { window.clearTimeout(timer); request.abort(); };
   }, [term]);
-
   useLayoutEffect(() => {
     if (pendingCaret.current === null) return;
     input.current?.setSelectionRange(pendingCaret.current, pendingCaret.current);
     pendingCaret.current = null;
   }, [value]);
-
   function select(person: Suggestion) {
     if (!fragment || caret === null) return;
     const start = fragment.index ?? caret - fragment[0].length;
@@ -90,7 +82,6 @@ export function MentionField({ label, lang, className, name, value, onChange, ro
     setDismissed(true);
     onChange(next);
   }
-
   function keys(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.nativeEvent.isComposing || !people.length) return;
     if (event.key === "Escape") {
@@ -105,7 +96,6 @@ export function MentionField({ label, lang, className, name, value, onChange, ro
       select(people[activeIndex]);
     }
   }
-
   const textarea = <textarea id={id} ref={input} name={name} value={value} rows={rows} maxLength={maxLength} disabled={disabled}
       placeholder={placeholderOnly ? label : undefined}
       aria-autocomplete="list" aria-controls={people.length ? `${id}-mentions` : undefined}
@@ -124,7 +114,6 @@ export function MentionField({ label, lang, className, name, value, onChange, ro
         }
       }}
       onKeyDown={keys} onBlur={() => { setCaret(null); setDismissed(false); }} />;
-
   return <div className={className}>
     <label htmlFor={id} className={placeholderOnly ? "sr-only" : undefined}>{label}</label>
     {autoGrow ? <div className="growing-textarea">

@@ -1,5 +1,4 @@
 "use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AtSign, Bell, Heart, MessageCircle, NotebookPen, UserPlus, UserRound } from "lucide-react";
@@ -7,14 +6,12 @@ import { api } from "../../lib/api";
 import { copy, type Lang } from "../../lib/locale";
 import { postPath, profilePath } from "../../lib/paths";
 import { readableError, useResource, type NoticeKind } from "../../profile/profile-data";
-
 type Notice = {
   id: number; kind: NoticeKind; actor: string; name: string; username: string; avatar: boolean;
   post_id: string | null; post_username: string | null; profile_mention: boolean; created: number; unread: boolean;
 };
 type Summary = { unread: number; latest: number | null; sound: boolean };
 type Inbox = Summary & { items: Notice[]; more: boolean };
-
 const kinds = {
   follow: { icon: UserPlus, text: "followEvent" },
   wall: { icon: NotebookPen, text: "wallEvent" },
@@ -22,26 +19,23 @@ const kinds = {
   reply: { icon: MessageCircle, text: "replyEvent" },
   mention: { icon: AtSign, text: "mentionEvent" },
 } as const;
-
 export function useNotificationBadge() {
   const [summary, setSummary] = useState<Summary | null>(null);
   const last = useRef<number | null | undefined>(undefined);
   const audio = useRef<AudioContext | null>(null);
   const [revision, setRevision] = useState(0);
   const reload = useCallback(() => setRevision(value => value + 1), []);
-
   useEffect(() => {
     if (!summary?.sound || typeof AudioContext === "undefined") return;
     function unlock() {
       try {
         audio.current ??= new AudioContext();
         void audio.current.resume().catch(() => undefined);
-      } catch { /* browser does not support sound here */ }
+      } catch {}
     }
     window.addEventListener("pointerdown", unlock, { once: true });
     return () => window.removeEventListener("pointerdown", unlock);
   }, [summary?.sound]);
-
   useEffect(() => () => { if (audio.current) void audio.current.close().catch(() => undefined); }, []);
   useEffect(() => {
     let request: AbortController | null = null;
@@ -79,7 +73,6 @@ export function useNotificationBadge() {
   }, [revision]);
   return { count: summary?.unread ?? 0, reload };
 }
-
 export function Notifications({ lang, onRead }: {
   lang: Lang; onRead: () => void;
 }) {
@@ -97,7 +90,6 @@ export function Notifications({ lang, onRead }: {
   const more = next ?? inbox.data?.more;
   const date = new Intl.DateTimeFormat(lang, { dateStyle: "medium", timeStyle: "short" });
   const latest = inbox.data?.latest;
-
   useEffect(() => {
     if (latest == null || latest <= readThrough) return;
     const through = latest;
@@ -119,7 +111,6 @@ export function Notifications({ lang, onRead }: {
       document.removeEventListener("visibilitychange", markRead);
     };
   }, [latest, onRead, readAttempt, readThrough]);
-
   async function act(action: () => Promise<void>) {
     if (busy) return;
     setBusy(true);
@@ -128,7 +119,6 @@ export function Notifications({ lang, onRead }: {
     catch (cause) { setError(readableError(lang, cause)); }
     finally { setBusy(false); }
   }
-
   if (inbox.error) return <div className="inline-state"><p role="alert">{readableError(lang, inbox.error)}</p>
     <button type="button" className="social-secondary" onClick={inbox.reload}>{site.social.retry}</button></div>;
   if (!inbox.data) return <p className="inline-state" role="status">{site.loading}</p>;

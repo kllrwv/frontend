@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { Timeline } from "../feed/timeline";
 import { profilePath, isUsername, isUuid } from "../lib/paths";
-
 export default async function FeedPage({ searchParams }: {
   searchParams: Promise<{ profile?: string; notifications?: string }>;
 }) {

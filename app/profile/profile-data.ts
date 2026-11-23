@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError } from "../lib/api";
 import { copy, type Lang } from "../lib/locale";
-
 export type Theme = "dark" | "light" | "system";
 export type Audience = "everyone" | "followers" | "nobody";
 export type NoticeKind = "follow" | "wall" | "like" | "reply" | "mention";
@@ -17,12 +16,10 @@ export type Preferences = {
   notice_preferences: Partial<Record<NoticePreference, boolean>>;
 };
 export type Blocked = { id: string; name: string; username: string };
-
 export function readableError(lang: Lang, cause: unknown) {
   const errors = copy[lang].errors;
   return (cause instanceof ApiError && errors[cause.message as keyof typeof errors]) || errors.unavailable;
 }
-
 export function useResource<T>(path: string | null) {
   const [response, setResponse] = useState<{ path: string; data: T } | null>(null);
   const [failure, setFailure] = useState<{ path: string; cause: unknown } | null>(null);

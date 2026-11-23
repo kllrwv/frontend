@@ -1,7 +1,5 @@
 import { copy, type Lang } from "../lib/locale";
-
 const graphemes = new Intl.Segmenter();
-
 export function NameWithBadge({ name, lang, size }: { name: string; lang: Lang; size?: number }) {
   const last = graphemes.segment(name).containing(name.length - 1);
   const wordStart = /\S+$/u.exec(name)?.index ?? last?.index ?? 0;
@@ -13,7 +11,6 @@ export function NameWithBadge({ name, lang, size }: { name: string; lang: Lang; 
     </span>
   </>;
 }
-
 export function Verified({ lang, size = 19 }: { lang: Lang; size?: number }) {
   return <svg className="verified-badge" width={size} height={size} viewBox="0 0 24 24"
     role="img" aria-label={copy[lang].admin.verified} focusable="false">

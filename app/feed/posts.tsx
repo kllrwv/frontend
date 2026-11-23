@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,15 +13,12 @@ import { DraftAttachment, PostAttachments, fileAccept, validAttachments } from "
 import { PollCard, PollEditor, initialPoll, validPoll, type Poll, type PollDraft } from "./poll";
 import { postPath, profilePath } from "../lib/paths";
 import { errorText, publish, type Author, type Post, type Preview } from "./post-data";
-
 export function Avatar({ source }: { source?: string }) {
   return <span className="social-avatar">{source ? <img src={source} alt="" loading="lazy" /> : <UserRound size={20} strokeWidth={1.6} />}</span>;
 }
-
 export function PostImage({ id, label }: { id: string; label: string }) {
   return <img className="post-image" src={`/api/posts/${id}/image`} alt={label} loading="lazy" decoding="async" />;
 }
-
 export function AuthorLine({ author, lang }: { author: Author; lang: Lang }) {
   return <div className="post-author">
     <Link className="profile-author-link" href={profilePath(author.username)}>
@@ -31,7 +27,6 @@ export function AuthorLine({ author, lang }: { author: Author; lang: Lang }) {
     <span>@{author.username}</span>
   </div>;
 }
-
 function Quote({ post, lang }: { post: Preview | null; lang: Lang }) {
   const t = copy[lang].social;
   if (!post) return <div className="post-quote unavailable-quote">{t.originalUnavailable}</div>;
@@ -49,7 +44,6 @@ function Quote({ post, lang }: { post: Preview | null; lang: Lang }) {
     {post.poll && <PollCard id={post.id} lang={lang} value={post.poll} />}
   </div>;
 }
-
 export function PostCard({ post, lang, toggleLike, toggleFollow, quote, detail = false, remove, onView, disabled, onVote, moderated }: {
   post: Post; lang: Lang; toggleLike: () => void; toggleFollow: () => void;
   quote: () => void; detail?: boolean; remove: () => void; onView?: (id: string) => void; disabled: boolean;
@@ -75,7 +69,6 @@ export function PostCard({ post, lang, toggleLike, toggleFollow, quote, detail =
   }, [post.id,post.deleted]);
   const date = new Date(post.created_at * 1000);
   const formatted = new Intl.DateTimeFormat(lang, { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }).format(date).toLowerCase();
-
   return <article className="post-card" data-openable={!detail} data-detail={detail} ref={element} onClick={detail ? undefined : event => {
     if (event.defaultPrevented || !(event.target instanceof Element)
       || event.target.closest("a,button,input,textarea,select,summary,audio,video,label")
@@ -127,7 +120,6 @@ export function PostCard({ post, lang, toggleLike, toggleFollow, quote, detail =
     </footer>
   </article>;
 }
-
 export function RepostEditor({ post, lang, submitted, close }: {
   post: Post; lang: Lang; submitted: () => void; close: () => void;
 }) {
@@ -136,7 +128,6 @@ export function RepostEditor({ post, lang, submitted, close }: {
   const [body, setBody] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (busy) return;
@@ -150,7 +141,6 @@ export function RepostEditor({ post, lang, submitted, close }: {
     } catch (error) { setError(errorText(lang, error)); }
     finally { setBusy(false); }
   }
-
   return <Dialog title={t.repost} close={close} closeLabel={t.close}>
     <Quote post={post} lang={lang} />
     <form className="response-form" onSubmit={submit}>
@@ -165,7 +155,6 @@ export function RepostEditor({ post, lang, submitted, close }: {
     </form>
   </Dialog>;
 }
-
 export function Composer({ lang, hasAvatar, onPublish, wall, avatarRevision }: { lang: Lang; hasAvatar: boolean; onPublish: () => void; wall?: string; avatarRevision: number }) {
   const t = copy[lang].social;
   const [body, setBody] = useState("");
@@ -175,9 +164,7 @@ export function Composer({ lang, hasAvatar, onPublish, wall, avatarRevision }: {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const id = useRef("");
-
   const ready = (body.trim() || attachments.length > 0 || poll) && (!poll || validPoll(poll));
-
   function attach(files: File[]) {
     if (!validAttachments(files)) {
       setError(copy[lang].errors.post_media_invalid);
@@ -187,12 +174,10 @@ export function Composer({ lang, hasAvatar, onPublish, wall, avatarRevision }: {
     id.current = "";
     setAttachments(files);
   }
-
   function changePoll(draft: PollDraft | null) {
     id.current = "";
     setPoll(draft);
   }
-
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (sending || !ready) return;
@@ -208,7 +193,6 @@ export function Composer({ lang, hasAvatar, onPublish, wall, avatarRevision }: {
     } catch (error) { setError(errorText(lang, error)); }
     finally { setSending(false); }
   }
-
   return <form className="social-card composer" onSubmit={submit}>
     <div className="composer-line">
       <Avatar source={hasAvatar ? `/api/profile/avatar?v=${avatarRevision}` : undefined} />

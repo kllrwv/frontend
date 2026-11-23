@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState, type FormEvent } from "react";
 import { Bell, Palette, Shield, UserRound, Users } from "lucide-react";
 import { api } from "../lib/api";
@@ -8,7 +7,6 @@ import { copy, type Lang } from "../lib/locale";
 import { MentionField } from "../ui/mentions";
 import { SecuritySettings } from "./security-settings";
 import { readableError, useResource, type Audience, type Blocked, type NoticePreference, type Owner, type Preferences, type ProfileView, type Theme } from "./profile-data";
-
 const sections = { account: UserRound, appearance: Palette, security: Shield, privacy: Users, notifications: Bell };
 type Section = keyof typeof sections;
 const audiences: Audience[] = ["everyone", "followers", "nobody"];
@@ -17,7 +15,6 @@ const noticeKeys = {
   all: "noticeAll", sound: "noticeSound", messages: "noticeMessage",
   follow: "noticeFollow", wall: "noticeWall", like: "noticeLike", reply: "noticeReply", mention: "noticeMention",
 } as const;
-
 export function ProfileSettings({ user, lang, close, saved, refreshProfile, themeChanged, deleted, revision }: {
   user: ProfileView; lang: Lang; close: () => void; saved: (profile: Owner) => void; refreshProfile: () => void;
   themeChanged: (theme: Theme) => void; deleted: () => void; revision: number;
@@ -32,7 +29,6 @@ export function ProfileSettings({ user, lang, close, saved, refreshProfile, them
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState("");
   const [deleting, setDeleting] = useState(false);
-
   async function run(action: () => Promise<void>) {
     if (busy) return false;
     setBusy(true);
@@ -42,7 +38,6 @@ export function ProfileSettings({ user, lang, close, saved, refreshProfile, them
     catch (cause) { setError(readableError(lang, cause)); return false; }
     finally { setBusy(false); }
   }
-
   function change(key: string, value: unknown) {
     void run(async () => {
       await api("settings/preferences", { key, value });
@@ -51,13 +46,11 @@ export function ProfileSettings({ user, lang, close, saved, refreshProfile, them
       refreshProfile();
     });
   }
-
   function deleteAccount(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const password = new FormData(event.currentTarget).get("password");
     void run(async () => { await api("settings/account/delete", { password }); deleted(); });
   }
-
   const preferences = prefs.data;
   return <Dialog title={t.settings} close={close} closeLabel={social.close} wide className="profile-settings-dialog">
     <div className="profile-settings">
@@ -132,7 +125,6 @@ export function ProfileSettings({ user, lang, close, saved, refreshProfile, them
     </Dialog>}
   </Dialog>;
 }
-
 function AccountEditor({ user, revision, lang, busy, onSave }: {
   user: ProfileView; revision: number; lang: Lang; busy: boolean; onSave: (form: FormData) => Promise<boolean>;
 }) {
@@ -155,7 +147,6 @@ function AccountEditor({ user, revision, lang, busy, onSave }: {
     if (remove) form.set("remove_avatar", "true");
     if (await onSave(form)) { setFile(null); setRemove(false); }
   }
-
   return <form className="settings-stack" onSubmit={submit}>
     <div className="settings-row settings-avatar">
       <span className="social-avatar">{source ? <img src={source} alt="" /> : <UserRound size={25} />}</span>

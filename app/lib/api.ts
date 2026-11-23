@@ -1,5 +1,4 @@
 export class ApiError extends Error {}
-
 export async function api<T>(path: string, body?: object | FormData, signal?: AbortSignal): Promise<T> {
   const multipart = body instanceof FormData;
   const response = await fetch("/api/" + path, {

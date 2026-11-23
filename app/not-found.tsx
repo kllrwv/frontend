@@ -1,9 +1,7 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { copy, storedLanguage, type Lang } from "./lib/locale";
-
 export default function NotFound() {
   const [lang, setLang] = useState<Lang>("ru");
   useEffect(() => {

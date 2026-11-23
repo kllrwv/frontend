@@ -3,28 +3,23 @@ import { ArrowLeft } from "lucide-react";
 import { copy, type Lang } from "../lib/locale";
 import { ServiceLinks, type DocumentKind } from "./links";
 import "./document.css";
-
 export type DocumentProps = {
   searchParams: Promise<{ lang?: string | string[] }>;
 };
-
 type DocumentSection = {
   id: string;
   title: string;
   paragraphs: string[];
   items?: string[];
 };
-
 export async function documentLocale({ searchParams }: DocumentProps): Promise<Lang> {
   return (await searchParams).lang === "en" ? "en" : "ru";
 }
-
 export function LegalDocument({ kind, lang }: { kind: DocumentKind; lang: Lang }) {
   const site = copy[lang];
   const t = site.legal;
   const page = t[kind];
   const sections: DocumentSection[] = page.sections;
-
   return <main className="legal-page" lang={lang}>
     <header className="legal-header">
       <Link className="social-wordmark" href="/"><img src="/logo.svg" alt="" width={28} height={28} />{site.brand}</Link>

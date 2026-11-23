@@ -1,5 +1,4 @@
 import { Timeline } from "../../feed/timeline";
-
 export default async function SearchPage({ searchParams }: {
   searchParams: Promise<{ q?: string; tag?: string }>;
 }) {

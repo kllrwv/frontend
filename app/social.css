@@ -1,5 +1,4 @@
 @reference "./theme.css";
-
 .session-gate {
   min-height: 100svh;
   display: grid;
@@ -20,11 +19,9 @@
   animation: session-spin .75s linear infinite;
 }
 @keyframes session-spin { to { transform: rotate(360deg); } }
-
 @media (prefers-reduced-motion: reduce) {
   .session-spinner { animation: none; }
 }
-
 @layer components {
   .social-shell {
     @apply grid gap-x-8 bg-stage text-ink;
@@ -36,32 +33,26 @@
     overflow: clip;
     padding: var(--top) var(--edge) 0;
   }
-
   .social-side,
   .social-status-side {
     min-height: 0;
     padding-bottom: var(--top);
   }
-
   .social-side { @apply flex min-w-0 flex-col items-start gap-12; }
   .social-wordmark { @apply inline-flex min-h-11 items-center gap-3 text-xl font-bold tracking-tight no-underline; }
   .social-wordmark img { @apply size-7 object-contain; }
   .social-nav { @apply grid w-full max-w-48 gap-1; }
-
   .social-nav a,
   .sign-out {
     @apply flex min-h-11 items-center gap-3 rounded-sm border-0 bg-transparent px-3 py-2 text-left text-sm font-medium text-muted no-underline;
   }
-
   .social-nav a[aria-current] {
     @apply bg-field text-ink;
     box-shadow: inset 2px 0 var(--color-signal);
   }
-
   .social-nav a:hover, .sign-out:hover { @apply bg-field text-ink; }
   .social-side-footer { @apply mt-auto grid justify-items-start gap-3; }
   .social-side-footer .language button { min-width: 44px; min-height: 44px; }
-
   .social-status-link { @apply flex flex-wrap justify-end gap-x-3; }
   .social-status-side { @apply content-end; }
   .social-status-inline { display: none; }
@@ -70,7 +61,6 @@
   }
   .social-status-link a:hover { @apply text-ink; }
   .social-status-link a svg { @apply shrink-0; }
-
   .social-main {
     @apply relative min-h-0 min-w-0 overflow-y-auto;
     overscroll-behavior-y: contain;
@@ -81,11 +71,9 @@
   .social-heading {
     @apply flex flex-wrap items-end justify-between gap-x-6 border-0 border-b border-solid border-rule;
   }
-
   .social-heading h1 {
     @apply pb-4 text-4xl leading-none font-bold tracking-tight;
   }
-
   .feed-switch { @apply flex min-w-0; }
   .feed-switch button {
     @apply min-h-11 border-0 border-b-2 border-solid border-transparent bg-transparent px-3 text-sm font-medium text-muted;
@@ -93,32 +81,25 @@
   }
   .feed-switch button:hover { @apply text-ink; }
   .feed-switch button[aria-pressed="true"] { @apply border-signal text-ink; }
-
   .social-card { @apply rounded-lg bg-field p-4; }
   .composer { @apply my-6; }
   .composer-line, .post-head, .post-quote header { @apply flex items-start gap-3; }
-
   .social-avatar {
     @apply inline-grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-control text-signal;
   }
   .social-avatar img { @apply size-full object-cover; }
-
   .composer-field, .response-field {
     @apply grid min-w-0 gap-2 text-sm font-medium text-muted;
   }
-
   .composer-field { @apply grow; }
   .composer-field > label { @apply pt-1; }
-
   .composer textarea, .response-form textarea, .growing-textarea-measure {
     @apply w-full min-w-0 rounded-sm text-base leading-normal font-normal text-ink;
   }
-
   .composer textarea, .composer .growing-textarea-measure {
     @apply min-h-12 border-0 bg-transparent p-0;
   }
   .composer textarea::placeholder { @apply text-muted; }
-
   .growing-textarea {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -130,30 +111,24 @@
   }
   .growing-textarea > textarea { resize: none; overflow: hidden; }
   .growing-textarea-measure { visibility: hidden; pointer-events: none; }
-
   .composer-tools {
     @apply mt-3 flex items-center gap-1 border-0 border-t border-solid border-rule pt-3;
   }
-
   .composer-tools .social-primary { @apply ml-auto; }
   .post-image {
     @apply block max-h-[30rem] w-full rounded-md bg-field object-contain;
   }
-
   .response-form textarea, .response-form .growing-textarea-measure {
     @apply min-h-11 border border-solid border-rule bg-control px-3 py-2;
   }
-
   .timeline-posts { @apply border-0 border-t border-solid border-rule; }
   .timeline-posts:empty { display: none; }
-
   .post-card {
     --content-inset: 52px;
     @apply border-0 border-b border-solid border-rule pt-4 pb-3;
     overflow-wrap: anywhere;
   }
   .post-card[data-openable="true"] { @apply cursor-pointer; }
-
   .post-byline { @apply min-w-0 flex-1 pt-0.5; }
   .post-author { @apply flex flex-wrap items-baseline gap-x-2 gap-y-1; }
   .post-author strong { @apply font-bold text-ink; }
@@ -161,7 +136,6 @@
   .post-byline time { @apply block font-data text-xs text-muted; }
   .post-date-link { @apply inline-block text-muted no-underline; }
   .post-date-link:hover { @apply underline; }
-
   .post-menu { @apply relative; }
   .post-menu summary { @apply list-none; }
   .post-menu summary::-webkit-details-marker { display: none; }
@@ -180,7 +154,6 @@
   }
   .post-card > .post-quote { margin: 12px 0 0 var(--content-inset); }
   .repost-label { @apply mb-2 flex items-center gap-2 text-sm text-muted; }
-
   .post-quote {
     @apply mt-3 rounded-r-md border-0 border-l-2 border-solid border-rule bg-field px-3 py-3;
   }
@@ -193,7 +166,6 @@
   .post-quote .post-body { margin-top: 8px; }
   .post-quote .post-image { @apply mt-3 max-h-64; }
   .unavailable-quote { @apply text-sm text-muted; }
-
   .post-actions { @apply mt-2 flex flex-wrap items-center gap-x-3; margin-inline-start: var(--content-inset); }
   .reaction, .icon-action {
     @apply inline-flex items-center justify-center rounded-sm border-0 bg-transparent text-muted;
@@ -206,14 +178,11 @@
   .reaction[aria-pressed="true"], .post-actions button:disabled { @apply text-ink; }
   .reaction[aria-pressed="true"] svg { fill: currentColor; }
   .view-count { @apply ml-auto; }
-
   .attach-file { @apply relative; }
   .attach-file input { @apply absolute inset-0 w-full cursor-pointer opacity-0; }
-
   .inline-state { @apply border-0 border-t border-solid border-rule py-8 text-sm leading-relaxed text-muted; }
   .inline-state .social-secondary { @apply mt-3; }
   .empty-feed { @apply flex items-center gap-3; }
-
   .social-primary, .social-secondary {
     @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-solid px-4 py-2 text-sm leading-snug font-bold;
   }
@@ -229,12 +198,10 @@
   .social-primary.danger-action:hover:not(:disabled) { background: #c42d36; }
   .social-error { color: #ffd0cc; margin: 12px 0; }
   .more-posts { @apply mt-4; }
-
   .social-dialog {
     @apply max-h-[94svh] overflow-auto rounded-lg border border-solid border-rule bg-field p-0 text-ink;
     width: min(calc(100% - 24px), 560px);
   }
-
   .social-dialog-wide { width: min(calc(100% - 24px), 960px); }
   .social-dialog::backdrop { background: rgb(0 0 0 / 76%); }
   .social-dialog > section { @apply p-4; }
@@ -245,7 +212,6 @@
   .dialog-actions { @apply mt-4 flex flex-wrap items-stretch justify-end gap-2; }
   .response-form { @apply mt-4; }
   .response-form textarea { @apply min-h-20 resize-y; }
-
   .drawing-tools { @apply flex flex-wrap items-center gap-x-4 gap-y-2 py-3; }
   .drawing-group { @apply flex flex-wrap items-center; }
   .drawing-width { @apply grid gap-1 text-xs text-muted; }
@@ -273,18 +239,15 @@
     aspect-ratio: 8 / 5;
     cursor: crosshair;
   }
-
   @media (max-width: 64rem) {
     .social-shell { grid-template-columns: minmax(132px, 1fr) minmax(0, 656px); }
     .social-status-side { display: none; }
     .social-status-inline { @apply mt-6 flex; }
   }
-
   @media (max-height: 34rem) and (min-width: 44.01rem) {
     .social-shell { --top: 12px; }
     .social-side { @apply gap-3; }
   }
-
   @media (max-width: 44rem) {
     .social-shell {
       @apply grid-cols-1 gap-y-4;
@@ -335,7 +298,6 @@
     .drawing-stage { @apply p-2; }
   }
 }
-
 .verified-name { display: flex; align-items: center; gap: .35rem; }
 .verified-badge { flex: none; vertical-align: middle; }
 .verified-name-word { display: inline-block; max-inline-size: 100%; overflow-wrap: anywhere; }

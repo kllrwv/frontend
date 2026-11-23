@@ -1,5 +1,4 @@
 "use client";
-
 import Script from "next/script";
 import { createContext, useContext, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Camera, Check, ChevronLeft, Eye, EyeOff, Radio, Send, UserRound } from "lucide-react";
@@ -8,8 +7,6 @@ import { copy, storedLanguage, type Lang } from "../lib/locale";
 import { Wave, type Mode } from "./wave";
 import { api, ApiError } from "../lib/api";
 import { useResource, type Preferences, type Theme } from "../profile/profile-data";
-
-
 type Stage = "email" | "telegram" | "totp" | "ready" | "conflict" | "unlinked";
 type Flow = {
   kind: Mode;
@@ -25,7 +22,6 @@ type Profile = {
   has_avatar: boolean;
 };
 type BrowserState = { profile: Profile | null; flow: Flow | null };
-
 type Session = {
   profile: Profile & { username: string };
   lang: Lang;
@@ -37,15 +33,12 @@ type Session = {
   theme: Theme;
   themeChanged: (theme: Theme) => void;
 };
-
 const SessionContext = createContext<Session | null>(null);
-
 export function useSession() {
   const session = useContext(SessionContext);
-  if (!session) throw new Error("Social pages require a signed-in session");
+  if (!session) throw new Error("social pages require a signed-in session");
   return session;
 }
-
 export function SessionGate({ children }: { children: ReactNode }) {
   const [sessionCheck, setSessionCheck] = useState<"checking" | "ready" | "failed">("checking");
   const [lang, setLang] = useState<Lang>("ru");
@@ -62,7 +55,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
   const t = copy[lang];
   const username = profile?.username;
   const preferences = useResource<Preferences>(username ? "settings/preferences" : null);
-
   useEffect(() => {
     if (!username) return;
     function presence() {
@@ -76,12 +68,10 @@ export function SessionGate({ children }: { children: ReactNode }) {
       document.removeEventListener("visibilitychange", presence);
     };
   }, [username]);
-
   function saveProfile(next: Profile | null) {
     if (next === null) setChangedTheme(null);
     setProfile(next);
   }
-
   async function restoreSession() {
     setSessionCheck("checking");
     try {
@@ -96,24 +86,20 @@ export function SessionGate({ children }: { children: ReactNode }) {
       setSessionCheck("failed");
     }
   }
-
   useEffect(() => {
     if (started.current) return;
     started.current = true;
     setLang(storedLanguage());
     void restoreSession();
   }, []);
-
   useEffect(() => {
     document.documentElement.lang = lang;
     document.title = copy[lang].brand;
   }, [lang]);
-
   function language(next: Lang) {
     setLang(next);
-    try { localStorage.setItem("killerwave.lang", next); } catch { /* apply for this visit */ }
+    try { localStorage.setItem("killerwave.lang", next); } catch {}
   }
-
   async function run(action: () => Promise<void>) {
     setError("");
     setBusy(true);
@@ -121,7 +107,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
     catch (failure) { setError(failure instanceof ApiError ? failure.message : "unavailable"); }
     finally { setBusy(false); }
   }
-
   function switchTo(next: Mode | null) {
     if (busy || completing.current) return;
     if (!flow) {
@@ -138,7 +123,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
       } finally { canceling.current = false; }
     });
   }
-
   useEffect(() => {
     if (flow?.stage !== "ready" && !(flow?.stage === "telegram" && flow.bot_url)) return;
     let mounted = true;
@@ -188,7 +172,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
     void check();
     return () => { mounted = false; clearInterval(timer); };
   }, [flow]);
-
   function credentials(event: FormEvent<HTMLFormElement>, active: Mode) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -203,14 +186,12 @@ export function SessionGate({ children }: { children: ReactNode }) {
         : { email: input, password, confirmation, lang }));
     });
   }
-
   function verify(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const code = String(new FormData(event.currentTarget).get("code") || "");
     if (!/^\d{6}$/.test(code)) return setError("code_wrong");
     void run(async () => setFlow(await api<Flow>("auth/email", { code })));
   }
-
   function verifyAuthenticator(code: string, recovery: boolean) {
     return run(async () => {
       await api("auth/totp", { code, recovery });
@@ -221,7 +202,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
       setFlow(null);
     });
   }
-
   function confirmTelegram(idToken: string) {
     return run(async () => {
       const { flow: confirmed } = await api<{ flow: Flow | null }>("auth/telegram/confirm", { id_token: idToken, lang });
@@ -236,11 +216,9 @@ export function SessionGate({ children }: { children: ReactNode }) {
       setFlow(null);
     });
   }
-
   function startBot(active: Mode) {
     void run(async () => setFlow(await api<Flow>("auth/telegram/bot", { mode: active, lang })));
   }
-
   function signOut() {
     void run(async () => {
       await api("auth/logout", {});
@@ -248,9 +226,7 @@ export function SessionGate({ children }: { children: ReactNode }) {
       setMode(null);
     });
   }
-
   const errorText = error ? t.errors[error as keyof typeof t.errors] ?? t.errors.invalid : "";
-
   function authContent(active: Mode) {
     if (flow?.stage === "totp") return (
       <AuthenticatorLogin lang={lang} busy={busy} error={errorText} clearError={() => setError("")}
@@ -317,7 +293,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
       </form>
     );
   }
-
   const languagePicker = (
     <div className="language" role="group" aria-label={t.language}>
       {(["ru", "en"] as const).map((choice) => <button key={choice} type="button" lang={choice}
@@ -326,7 +301,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
       </button>)}
     </div>
   );
-
   if (sessionCheck !== "ready") return (
     <main className="session-gate">
       {sessionCheck === "checking" ? <span className="session-spinner" role="status" aria-label={t.loading} /> : (
@@ -337,7 +311,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
       )}
     </main>
   );
-
   if (profile?.username) return (
     <SessionContext.Provider value={{
       profile: { ...profile, username: profile.username }, lang, languagePicker,
@@ -345,7 +318,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
       theme: changedTheme ?? preferences.data?.theme ?? "dark", themeChanged: setChangedTheme,
     }}>{children}</SessionContext.Provider>
   );
-
   return (
     <main className={`shell ${profile ? "inside" : ""}`} ref={shell}>
       {!profile && <Wave shell={shell} mode={mode} />}
@@ -388,7 +360,6 @@ export function SessionGate({ children }: { children: ReactNode }) {
     </main>
   );
 }
-
 function AuthenticatorLogin({ lang, busy, error, clearError, verify, restart }: {
   lang: Lang; busy: boolean; error: string; clearError: () => void;
   verify: (code: string, recovery: boolean) => Promise<void>; restart: () => void;
@@ -421,7 +392,6 @@ function AuthenticatorLogin({ lang, busy, error, clearError, verify, restart }: 
     <button type="button" className="subtle" onClick={restart} disabled={busy}>{t.again}</button>
   </form>;
 }
-
 type TelegramChallenge = { client_id: number; nonce: string };
 type TelegramResult = { id_token?: string; error?: string };
 type TelegramSdk = {
@@ -432,7 +402,6 @@ type TelegramSdk = {
   close: () => void;
 };
 type TelegramWindow = Window & { Telegram?: { Login?: TelegramSdk } };
-
 function TelegramButton({ mode, lang, busy, onError, onConfirm, onFallback }: {
   mode: Mode;
   lang: Lang;
@@ -449,7 +418,6 @@ function TelegramButton({ mode, lang, busy, onError, onConfirm, onFallback }: {
   const active = useRef(false);
   const request = useRef<{ mode: Mode; attempt: number; promise: Promise<TelegramChallenge> } | null>(null);
   const t = copy[lang];
-
   useEffect(() => {
     active.current = true;
     return () => {
@@ -457,7 +425,6 @@ function TelegramButton({ mode, lang, busy, onError, onConfirm, onFallback }: {
       (window as TelegramWindow).Telegram?.Login?.close();
     };
   }, []);
-
   useEffect(() => {
     let current = true;
     if (window.location.protocol !== "https:" || ["localhost", "127.0.0.1", "[::1]"].includes(window.location.hostname)) {
@@ -467,7 +434,6 @@ function TelegramButton({ mode, lang, busy, onError, onConfirm, onFallback }: {
     }
     setPreparing(true);
     setFailure("");
-    // Finish the challenge before the click so the browser treats the popup as user-initiated.
     if (request.current?.mode !== mode || request.current.attempt !== attempt) {
       request.current = { mode, attempt, promise: api<TelegramChallenge>("auth/telegram/web", { mode }) };
     }
@@ -483,12 +449,10 @@ function TelegramButton({ mode, lang, busy, onError, onConfirm, onFallback }: {
       });
     return () => { current = false; };
   }, [mode, attempt]);
-
   function fallback() {
     (window as TelegramWindow).Telegram?.Login?.close();
     onFallback(mode);
   }
-
   function open() {
     const sdk = (window as TelegramWindow).Telegram?.Login;
     if (failure || !sdk || sdkStatus !== "ready") {
@@ -522,7 +486,6 @@ function TelegramButton({ mode, lang, busy, onError, onConfirm, onFallback }: {
       fallback();
     }
   }
-
   return <>
     {challenge && <Script src="https://oauth.telegram.org/js/telegram-login.js"
       onReady={() => setSdkStatus("ready")} onError={() => setSdkStatus("failed")} />}
@@ -537,13 +500,11 @@ function TelegramButton({ mode, lang, busy, onError, onConfirm, onFallback }: {
       </button>}
   </>;
 }
-
 function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return <label className="field">
     <span>{label}</span>{children}{hint && <small>{hint}</small>}
   </label>;
 }
-
 function Password({ label, hint, name, autoComplete, lang }: {
   label: string; hint?: string; name: string; autoComplete: string; lang: Lang;
 }) {
@@ -558,15 +519,12 @@ function Password({ label, hint, name, autoComplete, lang }: {
     </button>
   </div>;
 }
-
 function ErrorNote({ text }: { text: string }) {
   return text ? <p className="error" role="alert">{text}</p> : null;
 }
-
 function Avatar({ src }: { src?: string }) {
   return <span className="avatar">{src ? <img alt="" src={src} /> : <UserRound size={31} strokeWidth={1.65} />}</span>;
 }
-
 function ProfileForm({ lang, busy, error, setError, onSave, onSignOut }: {
   lang: Lang; busy: boolean; error: string; setError: (value: string) => void;
   onSave: (form: FormData) => void; onSignOut: () => void;
@@ -580,7 +538,6 @@ function ProfileForm({ lang, busy, error, setError, onSave, onSignOut }: {
     setPreview(url);
     return () => URL.revokeObjectURL(url);
   }, [avatar]);
-
   function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -589,7 +546,6 @@ function ProfileForm({ lang, busy, error, setError, onSave, onSignOut }: {
     if (avatar) form.set("avatar", avatar);
     onSave(form);
   }
-
   return <form className="profile-sheet" onSubmit={save} noValidate>
     <h1>{t.profile}</h1>
     <p>{t.profileHint}</p>

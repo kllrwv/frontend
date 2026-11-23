@@ -1,16 +1,11 @@
 "use client";
-
 import { useEffect, useRef, type RefObject } from "react";
-
 export type Mode = "login" | "register";
-
 const timeConstant = 74;
 const hoverSplit = .08;
 const frameInterval = 1000 / 60 - 1;
 const maxPixels = 1_250_000;
-
 type Motion = { value: number; target: number; velocity: number };
-
 function glide(motion: Motion, elapsed: number, decay: number, snap: boolean) {
   const offset = motion.value - motion.target;
   const slope = motion.velocity + offset / timeConstant;
@@ -23,7 +18,6 @@ function glide(motion: Motion, elapsed: number, decay: number, snap: boolean) {
   }
   return true;
 }
-
 export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mode: Mode | null }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const selection = useRef(mode);
@@ -31,7 +25,6 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
     selection.current = mode;
     shell.current?.dispatchEvent(new Event("wavechange"));
   }, [mode, shell]);
-
   useEffect(() => {
     const root = shell.current;
     const element = canvas.current;
@@ -55,15 +48,12 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
     const lightLayer = document.createElement("canvas");
     const darkSheen = cacheSheen(false);
     const lightSheen = cacheSheen(true);
-
     function paint() {
       if (!context || !root) return;
       const vertical = narrow.matches;
       const w = vertical ? height : width;
       const h = vertical ? width : height;
       if (w < 1 || h < 1) return;
-
-      // Cache the fine linework so pointer motion only recomposites the two layers.
       const artWidth = vertical ? Math.max(w, 785) : w;
       const size = `${artWidth}/${h}/${ratio}`;
       if (size !== artworkSize) {
@@ -92,7 +82,6 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
         const t = index / 60;
         path.lineTo(edge(t), t * h);
       }
-
       context.drawImage(darkLayer, 0, 0, w, h);
       sheen(context, darkSheen, w, h, divider * .50, pointerX.value, pointerY.value, phase, focus.value);
       const lightSide = new Path2D(path);
@@ -104,7 +93,6 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
       context.drawImage(lightLayer, 0, 0, w, h);
       sheen(context, lightSheen, w, h, divider + (w - divider) * .47, pointerX.value, pointerY.value, phase, focus.value);
       context.restore();
-
       context.strokeStyle = "#fafafa20";
       context.lineWidth = 6;
       context.stroke(path);
@@ -112,7 +100,6 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
       context.lineWidth = 1.45;
       context.stroke(path);
     }
-
     function tick(now: number) {
       frame = 0;
       const snap = reduced.matches;
@@ -138,7 +125,6 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
         root.style.setProperty("--wave-attention", String(attention.value));
       }
       if (artworkChanged) paint();
-
       if (moving) {
         lastFrame = now;
         schedule();
@@ -146,11 +132,9 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
         lastFrame = undefined;
       }
     }
-
     function schedule() {
       if (!frame) frame = requestAnimationFrame(tick);
     }
-
     function center() {
       const compact = narrow.matches;
       split.target = selection.current === "login" ? (compact ? .86 : .79)
@@ -161,7 +145,6 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
       attention.target = 0;
       schedule();
     }
-
     function move(event: PointerEvent) {
       if (selection.current || reduced.matches || event.pointerType === "touch" || narrow.matches || !width || !height) return;
       const x = Math.max(0, Math.min(1, event.pageX / width));
@@ -169,13 +152,11 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
       if (x === pointerX.target && y === pointerY.target) return;
       pointerX.target = x;
       pointerY.target = y;
-      // A small dead zone keeps the two sides from fighting for focus at the center.
       if (pointerX.target < .485) attention.target = 1;
       if (pointerX.target > .515) attention.target = -1;
       split.target = .5 + attention.target * hoverSplit;
       schedule();
     }
-
     function resize() {
       if (!element || !root) return;
       const nextWidth = root.clientWidth;
@@ -192,7 +173,6 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
       if (element.height !== pixelHeight) element.height = pixelHeight;
       paint();
     }
-
     const observer = new ResizeObserver(resize);
     observer.observe(root);
     root.addEventListener("pointermove", move);
@@ -215,12 +195,9 @@ export function Wave({ shell, mode }: { shell: RefObject<HTMLElement | null>; mo
       narrow.removeEventListener("change", center);
     };
   }, [shell]);
-
   return <canvas className="wave" ref={canvas} aria-hidden="true" />;
 }
-
 type SheenTextures = { reflection: HTMLCanvasElement; streak: HTMLCanvasElement };
-
 function cacheSheen(light: boolean): SheenTextures {
   function texture(stops: [number, string][], x: number, y: number, radius: number) {
     const canvas = document.createElement("canvas");
@@ -234,7 +211,6 @@ function cacheSheen(light: boolean): SheenTextures {
     context.fillRect(-1, -1, 2, 2);
     return canvas;
   }
-
   return {
     reflection: texture([
       [0, light ? "#ffffffdc" : "#c6c6c63a"],
@@ -250,7 +226,6 @@ function cacheSheen(light: boolean): SheenTextures {
     ], 0, 0, 0),
   };
 }
-
 function sheen(
   context: CanvasRenderingContext2D, textures: SheenTextures, w: number, h: number,
   centerX: number, x: number, y: number, phase: number, focus: number,
@@ -264,21 +239,18 @@ function sheen(
   context.rotate(angle);
   context.scale(w * .31, h * .30);
   context.drawImage(textures.reflection, -1, -1, 2, 2);
-
   context.translate(.36 * Math.cos(phase * .8), .64 * Math.sin(phase * .63 + x * 2));
   context.rotate(.47 + y * .44);
   context.scale(.76, .24);
   context.drawImage(textures.streak, -1, -1, 2, 2);
   context.restore();
 }
-
 function drawLayer(canvas: HTMLCanvasElement, w: number, h: number, ratio: number, light: boolean) {
   canvas.width = Math.ceil(w * ratio);
   canvas.height = Math.ceil(h * ratio);
   const context = canvas.getContext("2d", { alpha: false });
   if (!context) return;
   context.setTransform(ratio, 0, 0, ratio, 0, 0);
-
   const base = light ? context.createLinearGradient(w * .24, h, w, 0)
     : context.createLinearGradient(0, 0, w * .64, h);
   base.addColorStop(0, light ? "#d2d2d2" : "#090909");
@@ -286,7 +258,6 @@ function drawLayer(canvas: HTMLCanvasElement, w: number, h: number, ratio: numbe
   base.addColorStop(1, light ? "#e8e8e8" : "#101010");
   context.fillStyle = base;
   context.fillRect(0, 0, w + 1, h + 1);
-
   if (!light) {
     const glow = context.createRadialGradient(w * .22, h * .88, 0, w * .22, h * .88, Math.max(w * .46, h * .72));
     glow.addColorStop(0, "#3b3b3b");
@@ -295,7 +266,6 @@ function drawLayer(canvas: HTMLCanvasElement, w: number, h: number, ratio: numbe
     context.fillStyle = glow;
     context.fillRect(0, 0, w + 1, h + 1);
   }
-
   const tint = context.createLinearGradient(0, h * .9, w, h * .22);
   if (light) {
     tint.addColorStop(0, "#44444400");

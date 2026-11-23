@@ -1,9 +1,7 @@
 "use client";
-
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { AudioLines, Maximize, Pause, Play, Volume2, VolumeX, X } from "lucide-react";
 import { copy, type Lang } from "../lib/locale";
-
 export type Attachment = { position: number; kind: "image" | "video" | "audio"; title: string; deleted?: boolean };
 const mib = 1024 * 1024;
 const LIMITS: Record<string, number> = {
@@ -12,18 +10,15 @@ const LIMITS: Record<string, number> = {
   "audio/mpeg": 16, "audio/mp3": 16, "audio/mp4": 16, "audio/x-m4a": 16,
   "audio/ogg": 16, "audio/wav": 16, "audio/x-wav": 16, "audio/vnd.wave": 16,
 };
-
 export const fileAccept = Object.keys(LIMITS).join(",");
 export function validAttachments(files: File[]) {
   return files.length <= 4 && files.every(file => file.size > 0 && file.size <= (LIMITS[file.type] ?? 0) * mib)
     && files.reduce((sum, file) => sum + file.size, 0) <= 96 * mib;
 }
-
 function timeCode(seconds: number) {
   const whole = Math.floor(seconds);
   return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")}`;
 }
-
 export function MediaPlayer({ source, kind, title, lang }: {
   source: string; kind: "video" | "audio"; title: string; lang: Lang;
 }) {
@@ -37,12 +32,10 @@ export function MediaPlayer({ source, kind, title, lang }: {
   const [error, setError] = useState(false);
   const video = kind === "video";
   const label = title || t[kind];
-
   function syncDuration() {
     const seconds = element.current?.duration ?? 0;
     setDuration(Number.isFinite(seconds) ? seconds : 0);
   }
-
   function toggle() {
     const media = element.current;
     if (!media) return;
@@ -51,7 +44,6 @@ export function MediaPlayer({ source, kind, title, lang }: {
       void media.play().catch(cause => { if (cause?.name !== "AbortError") setError(true); });
     } else media.pause();
   }
-
   async function fullscreen() {
     const media = element.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null;
     try {
@@ -62,7 +54,6 @@ export function MediaPlayer({ source, kind, title, lang }: {
       media?.webkitEnterFullscreen?.();
     }
   }
-
   const events = {
     onPlay: () => setPlaying(true),
     onPause: () => setPlaying(false),
@@ -74,7 +65,6 @@ export function MediaPlayer({ source, kind, title, lang }: {
   };
   const transport = playing ? <Pause size={18} /> : <Play size={18} />;
   const seekValue = duration ? Math.min(duration, position) : 0;
-
   return <div className={`media-player media-${kind}`} ref={frame} role="group" aria-label={label}>
     {video ? <div className="video-stage">
       <video ref={node => { element.current = node; }} src={source} preload="metadata" playsInline aria-label={label} {...events} />
@@ -102,7 +92,6 @@ export function MediaPlayer({ source, kind, title, lang }: {
     {error && <p className="social-error media-error" role="status">{t.playerError}</p>}
   </div>;
 }
-
 export function PostAttachments({ id, media, lang }: { id: string; media: Attachment[]; lang: Lang }) {
   if (!media.length) return null;
   return <div className="post-media">{media.map(file => {
@@ -113,11 +102,9 @@ export function PostAttachments({ id, media, lang }: { id: string; media: Attach
       {file.deleted && <p className="removed-caption">{copy[lang].admin.deletedAsset}</p>}</div>;
   })}</div>;
 }
-
 export function DraftAttachment({ file, lang, remove, disabled }: { file: File; lang: Lang; remove: () => void; disabled: boolean }) {
   const image = file.type.startsWith("image/");
   const [preview, setPreview] = useState("");
-  // Only photos need a preview in the composer. The server encodes the final image.
   useEffect(() => {
     if (!image) { setPreview(""); return; }
     const url = URL.createObjectURL(file);

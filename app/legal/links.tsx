@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { copy, type Lang } from "../lib/locale";
-
 export type DocumentKind = "privacy" | "terms";
-
 export function ServiceLinks({ lang, current }: { lang: Lang; current?: DocumentKind }) {
   const t = copy[lang].legal;
   const locale = lang === "en" ? "?lang=en" : "";

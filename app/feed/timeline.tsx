@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -19,7 +18,6 @@ import { ProfileSettings } from "../profile/profile-settings";
 import { Discussion } from "./discussion";
 import { errorText, useFeed, type Post } from "./post-data";
 import { Composer, PostCard, RepostEditor } from "./posts";
-
 type Screen =
   | { view: "feed" }
   | { view: "search"; query: string }
@@ -27,7 +25,6 @@ type Screen =
   | { view: "notifications" }
   | { view: "profile"; handle: string; legacy?: boolean }
   | { view: "post"; handle: string; id: string };
-
 export function Timeline({ screen }: { screen: Screen }) {
   const session = useSession();
   const { lang } = session;
@@ -58,11 +55,9 @@ export function Timeline({ screen }: { screen: Screen }) {
   const hasFollowingPosts = feed.hasFollowingPosts;
   const badge = useNotificationBadge();
   const access = useResource<Access>("mod/access").data;
-
   useEffect(() => {
     if (feedMode === "following" && hasFollowingPosts === false) setFeedMode("recommended");
   }, [feedMode, hasFollowingPosts]);
-
   const canonicalProfile = viewedProfile && user && (viewedProfile.legacy || user.username !== viewedProfile.handle)
     ? profilePath(user.username) : null;
   const canonicalPost = selectedPost && post && (post.author.username !== selectedPost.handle || post.id !== selectedPost.id)
@@ -71,7 +66,6 @@ export function Timeline({ screen }: { screen: Screen }) {
   useEffect(() => {
     if (canonical) router.replace(canonical, { scroll: false });
   }, [canonical, router]);
-
   async function change(action: () => Promise<unknown>, done: () => void) {
     if (working) return;
     setWorking(true);
@@ -80,7 +74,6 @@ export function Timeline({ screen }: { screen: Screen }) {
     catch (cause) { setError(errorText(lang, cause)); }
     finally { setWorking(false); }
   }
-
   function recordView(id: string) {
     if (seen.current.has(id)) return;
     seen.current.add(id);
@@ -89,7 +82,6 @@ export function Timeline({ screen }: { screen: Screen }) {
       else feed.update(item => item.id === id ? { ...item, views: Math.max(item.views, views) } : item);
     }).catch(() => seen.current.delete(id));
   }
-
   function renderPost(item: Post, isDetail = false) {
     return <PostCard key={item.id} post={item} lang={lang} detail={isDetail} disabled={working} onView={recordView} moderated={isDetail ? detail.reload : feed.reload}
       onVote={value => {
@@ -109,7 +101,6 @@ export function Timeline({ screen }: { screen: Screen }) {
       quote={() => setDialog({ type: "repost", post: item })}
       remove={() => { setError(""); setDialog({ type: "delete", post: item }); }} />;
   }
-
   const heading = screen.view === "tag" ? `#${screen.tag}` : screen.view === "search" ? t.search :
     screen.view === "notifications" ? p.notifications : screen.view === "post" ? t.postTitle : site.feed;
   const statusLinks = <>
@@ -117,7 +108,6 @@ export function Timeline({ screen }: { screen: Screen }) {
     <Link href="/status"><Activity size={17} />{t.status}<ArrowUpRight size={14} aria-hidden="true" /></Link>
     <ServiceLinks lang={lang} />
   </>;
-
   return <main className="social-shell" data-theme={session.theme}>
     <aside className="social-side">
       <Link href="/" className="social-wordmark"><img src="/logo.svg" alt="" width={29} height={29} /><span>{site.feedBrand}</span></Link>

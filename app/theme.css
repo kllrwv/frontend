@@ -2,7 +2,6 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "./globals.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
-
 @theme static {
   --color-stage: #000;
   --color-ink: #f6f6f6;
