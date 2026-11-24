@@ -29,6 +29,10 @@
 }
 .welcome-dialog h2:focus { outline: none; }
 .welcome-dialog-copy { display: grid; gap: .8rem; margin-top: 16px; color: #d0d0d0; line-height: 1.65; }
+.welcome-dialog a { text-underline-offset: .2em; }
+.welcome-dialog a:hover { color: #fff; }
+.welcome-dialog-links { display: flex; flex-wrap: wrap; gap: 0 16px; margin-top: 12px; font-size: .875rem; }
+.welcome-dialog-links a { display: inline-flex; align-items: center; min-height: 36px; }
 .welcome-dialog-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
 .welcome-dialog-actions > button { flex: 1 1 auto; min-height: 46px; border-radius: 999px; text-align: center; }
 @keyframes welcome-appear {
