@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://oauth.telegram.org; style-src 'unsafe-inline'; img-src 'self'; connect-src https://oauth.telegram.org; base-uri 'none'; form-action 'none'">
+<title>killerwave</title>
+<style>
+:root{color-scheme:light dark;font:17px system-ui,sans-serif}body{display:grid;place-items:center;min-height:100svh;margin:0;background:Canvas;color:CanvasText}main{display:grid;justify-items:center;gap:16px;width:min(90vw,360px);text-align:center}img{border-radius:16px;background:#000}h1,p{margin:0}button{font:inherit;color:CanvasText;background:color-mix(in srgb,CanvasText 10%,Canvas);border:1px solid color-mix(in srgb,CanvasText 20%,Canvas);border-radius:24px;padding:12px 24px}button:disabled{opacity:.5}p{font-size:.9rem}
+</style>
+<script defer src="https://oauth.telegram.org/js/telegram-login.js"></script>
+<script defer src="/ios-telegram.js"></script>
+</head>
+<body>
+<main>
+<img src="/apple-touch-icon.png" alt="" width="76" height="76">
+<h1>killerwave</h1>
+<p id="notice" role="status"></p>
+<button type="button" id="telegram" disabled>продолжить в telegram</button>
+</main>
+</body>
+</html>

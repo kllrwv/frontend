@@ -12,3 +12,33 @@
   --color-control: #202020;
   --font-data: Menlo, Consolas, "DejaVu Sans Mono", monospace;
 }
+.open-in-app {
+  position: fixed;
+  inset-inline-end: max(14px, env(safe-area-inset-right));
+  inset-block-end: calc(88px + env(safe-area-inset-bottom));
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid #ffffff22;
+  border-radius: 999px;
+  background: #1a1a1af5;
+  color: #f2f2f2;
+  box-shadow: 0 4px 18px #0004;
+  padding: 3px;
+  font-size: .875rem;
+}
+.open-in-app a, .open-in-app button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-block-size: 42px;
+  border-radius: inherit;
+}
+.open-in-app a { padding-inline: 13px; text-decoration: none; font-weight: 650; }
+.open-in-app button { inline-size: 42px; border: 0; background: transparent; }
+.open-in-app a:hover, .open-in-app button:hover { background: #ffffff12; }
+@media (min-width: 44.01rem) {
+  .open-in-app { inset-block-end: calc(16px + env(safe-area-inset-bottom)); }
+}
