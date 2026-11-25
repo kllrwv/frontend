@@ -7,7 +7,7 @@ import { copy, type Lang } from "../lib/locale";
 import { profilePath, tagPath } from "../lib/paths";
 import { Verified } from "../ui/verified";
 type Tag = { tag: string; posts: number };
-type Person = { id: string; username: string; name: string; avatar: boolean; followed: boolean; mine: boolean; verified?: boolean; deleted?: boolean };
+type Person = { id: string; username: string; name: string; avatar: boolean; followed: boolean; mine: boolean; verified?: boolean; deleted?: boolean; matched_username?: string | null };
 type Results = { tags: Tag[]; people: Person[] };
 export function Discovery({ lang, initialQuery }: {
   lang: Lang; initialQuery: string;
@@ -70,7 +70,7 @@ export function Discovery({ lang, initialQuery }: {
         <ul>{data.people.map(person => <li key={person.id} className="discovery-person">
           <span className="social-avatar">{person.avatar ? <img src={`/api/avatars/${person.id}`} alt="" /> : <UserRound size={19} />}</span>
           <div><span className="verified-name"><Link className="profile-author-link" href={profilePath(person.username)}>{person.name}</Link>
-            {person.verified && <Verified lang={lang} />}</span><span>@{person.username}</span>
+            {person.verified && <Verified lang={lang} />}</span><span>@{person.username}{person.matched_username && ` · @${person.matched_username}`}</span>
             {person.deleted && <small className="removed-caption">{site.admin.deletedAccount}</small>}</div>
           {!person.mine && !person.deleted && <button className="social-secondary" type="button" disabled={working !== null}
             aria-pressed={person.followed} onClick={() => void toggleFollow(person)}>

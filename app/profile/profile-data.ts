@@ -9,6 +9,7 @@ export type Owner = { username: string | null; display_name: string | null; bio:
 export type ProfileView = {
   id: string; username: string; name: string; bio: string; avatar: boolean; banner: string | null;
   verified?: boolean; deleted?: boolean; mine: boolean; followed: boolean; following: number; followers: number; joined: number;
+  aliases?: string[];
   last_seen: number | null; can_write: boolean; can_see_likes: boolean; theme: Theme | null;
 };
 export type Preferences = {

@@ -23,7 +23,7 @@ type Screen =
   | { view: "search"; query: string }
   | { view: "tag"; tag: string }
   | { view: "notifications" }
-  | { view: "profile"; handle: string; legacy?: boolean }
+  | { view: "profile"; handle: string; legacy?: boolean; bare?: boolean }
   | { view: "post"; handle: string; id: string };
 export function Timeline({ screen }: { screen: Screen }) {
   const session = useSession();
@@ -58,7 +58,7 @@ export function Timeline({ screen }: { screen: Screen }) {
   useEffect(() => {
     if (feedMode === "following" && hasFollowingPosts === false) setFeedMode("recommended");
   }, [feedMode, hasFollowingPosts]);
-  const canonicalProfile = viewedProfile && user && (viewedProfile.legacy || user.username !== viewedProfile.handle)
+  const canonicalProfile = viewedProfile && user && (viewedProfile.legacy || viewedProfile.bare || user.username !== viewedProfile.handle)
     ? profilePath(user.username) : null;
   const canonicalPost = selectedPost && post && (post.author.username !== selectedPost.handle || post.id !== selectedPost.id)
     ? postPath(post.author.username, post.id) : null;

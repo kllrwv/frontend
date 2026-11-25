@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useState, type FormEvent } from "react";
-import { Bell, Palette, Shield, UserRound, Users } from "lucide-react";
+import Link from "next/link";
+import { Bell, Link2, Palette, Shield, UserRound, Users } from "lucide-react";
 import { api } from "../lib/api";
 import { Dialog } from "../ui/dialog";
 import { copy, type Lang } from "../lib/locale";
 import { MentionField } from "../ui/mentions";
 import { SecuritySettings } from "./security-settings";
 import { readableError, useResource, type Audience, type Blocked, type NoticePreference, type Owner, type Preferences, type ProfileView, type Theme } from "./profile-data";
-const sections = { account: UserRound, appearance: Palette, security: Shield, privacy: Users, notifications: Bell };
+const sections = { account: UserRound, aliases: Link2, appearance: Palette, security: Shield, privacy: Users, notifications: Bell };
 type Section = keyof typeof sections;
 const audiences: Audience[] = ["everyone", "followers", "nobody"];
 const themes: Theme[] = ["dark", "light", "system"];
@@ -25,6 +26,7 @@ export function ProfileSettings({ user, lang, close, saved, refreshProfile, them
   const prefs = useResource<Preferences>("settings/preferences");
   const blockList = useResource<Blocked[]>("settings/blocked");
   const [section, setSection] = useState<Section>("account");
+  const aliases = useResource<{ username: string; enabled: boolean }[]>(section === "aliases" ? "settings/usernames" : null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -68,8 +70,28 @@ export function ProfileSettings({ user, lang, close, saved, refreshProfile, them
           <button type="button" className="social-secondary danger-action account-delete" disabled={busy}
             onClick={() => { setError(""); setDeleting(true); }}>{t.deleteAccount}</button>
         </>}
+        {section === "aliases" && <div className="settings-stack">
+          <p className="settings-feedback">{t.aliasesHint}</p>
+          {aliases.error ? <div><p className="social-error" role="alert">{readableError(lang, aliases.error)}</p>
+            <button type="button" className="social-secondary" onClick={aliases.reload}>{social.retry}</button></div>
+            : !aliases.data ? <p role="status">{site.loading}</p>
+            : !aliases.data.length ? <p className="settings-feedback">{t.aliasesEmpty}</p>
+            : <ul className="session-list settings-alias-list">{aliases.data.map(alias => <li key={alias.username}>
+              <div>{alias.enabled ? <Link href={`/${encodeURIComponent(alias.username)}`} onNavigate={close}>@{alias.username}</Link> : <span>@{alias.username}</span>}</div>
+              <label className="settings-alias-toggle"><span>{alias.enabled ? t.aliasActive : t.aliasInactive}</span>
+                <input type="checkbox" role="switch" aria-label={`@${alias.username}`} checked={alias.enabled} disabled={busy}
+                  onChange={event => {
+                    const enabled = event.target.checked;
+                    void run(async () => {
+                      await api("settings/usernames", { username: alias.username, enabled });
+                      aliases.reload(); refreshProfile();
+                    });
+                  }} />
+              </label>
+            </li>)}</ul>}
+        </div>}
         {section === "security" && <SecuritySettings lang={lang} />}
-        {section !== "account" && section !== "security" && (!preferences ? (
+        {section !== "account" && section !== "aliases" && section !== "security" && (!preferences ? (
           prefs.error ? <div><p className="social-error" role="alert">{readableError(lang, prefs.error)}</p>
             <button type="button" className="social-secondary" onClick={prefs.reload}>{social.retry}</button></div> :
             <p role="status">{site.loading}</p>

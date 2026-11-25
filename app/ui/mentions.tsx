@@ -27,7 +27,7 @@ export function LinkedText({ value, linkTags = false }: { value: string; linkTag
   pieces.push(value.slice(offset));
   return <>{pieces}</>;
 }
-type Suggestion = { id: string; name: string; username: string };
+type Suggestion = { id: string; name: string; username: string; matched_username?: string | null };
 type Results = { people: Suggestion[] };
 export function MentionField({ label, lang, className, name, value, onChange, rows, maxLength, disabled, placeholderOnly = false, autoGrow = false }: {
   label: string; lang: Lang; className: string; name?: string; value: string; onChange: (value: string) => void;
@@ -70,7 +70,7 @@ export function MentionField({ label, lang, className, name, value, onChange, ro
     const tail = value.slice(caret);
     const end = caret + (tail.match(fragmentTail)?.[0].length ?? 0);
     const remainder = value.slice(end);
-    const mention = `@${person.username}`;
+    const mention = `@${person.matched_username ?? person.username}`;
     const replacement = !remainder || /^[\p{L}\p{N}_-]/u.test(remainder) ? `${mention} ` : mention;
     const next = value.slice(0, start) + replacement + remainder;
     if (next.length > maxLength) return;
@@ -124,7 +124,7 @@ export function MentionField({ label, lang, className, name, value, onChange, ro
       {people.map((person, index) => <li key={person.id} id={`${id}-mention-${index}`}
         role="option" aria-selected={index === activeIndex} onMouseDown={event => event.preventDefault()}
         onClick={() => select(person)}>
-        <strong>{person.name}</strong><span>@{person.username}</span>
+        <strong>{person.name}</strong><span>@{person.matched_username ?? person.username}</span>
       </li>)}
     </ul>}
   </div>;
