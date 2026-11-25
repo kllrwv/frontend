@@ -1,6 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
-import Link from "next/link";
+import { Fragment, useRef, useState } from "react";
 import { Brush, Ellipsis, ImagePlus, Pencil, ShieldBan, Trash2, UserRound } from "lucide-react";
 import { api } from "../lib/api";
 import { Dialog } from "../ui/dialog";
@@ -101,11 +100,12 @@ export function ProfileHead({ data, lang, revision, edit, changed, blocked, acce
       </div>
     </div>
     <h1>{data.verified ? <NameWithBadge name={data.name} lang={lang} size={24} /> : data.name}</h1>
-    <p className="profile-handle">@{data.username}</p>
-    {!!data.aliases?.length && <details className="profile-aliases">
-      <summary>{t.aliases} <span>{number.format(data.aliases.length)}</span></summary>
-      <ul>{data.aliases.map(alias => <li key={alias}><Link href={`/${encodeURIComponent(alias)}`}>@{alias}</Link></li>)}</ul>
-    </details>}
+    <p className="profile-handle">
+      <span>@{data.username}</span>
+      {!!data.aliases?.length && <>, {t.aliasesAlso}{" "}{data.aliases.map((alias, index) => (
+        <Fragment key={alias}>{index > 0 && ", "}<span>@{alias}</span></Fragment>
+      ))}</>}
+    </p>
     {data.bio && <p className="profile-bio"><LinkedText value={data.bio} /></p>}
     <div className="profile-facts">
       {(["followers", "following"] as const).map(direction => {
