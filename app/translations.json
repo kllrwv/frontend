@@ -3,7 +3,6 @@
     "site": {
       "brand": "killerwave",
       "description": "социальная сеть killerwave",
-      "openInApp": { "open": "открыть в приложении", "close": "скрыть" },
       "welcome": {
         "title": "что такое killerwave?",
         "intro": "killerwave – свободная социальная сеть. здесь можно делиться мыслями, фото, видео и музыкой, находить людей по интересам и обсуждать то, что вам важно.",
@@ -1003,7 +1002,6 @@
     "site": {
       "brand": "killerwave",
       "description": "killerwave social network",
-      "openInApp": { "open": "open in app", "close": "dismiss" },
       "welcome": {
         "title": "what is killerwave?",
         "intro": "killerwave is a free social network. share your thoughts, photos, videos, and music, meet people with similar interests, and talk about what matters to you.",

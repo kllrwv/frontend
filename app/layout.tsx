@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import "@fontsource-variable/manrope";
 import "./theme.css";
 import "./social.css";
@@ -8,7 +7,6 @@ import "./profile/profile.css";
 import "./feed/discussion.css";
 import "./status/status.css";
 import { copy } from "./lib/locale";
-import { OpenInApp } from "./ui/open-in-app";
 import { WelcomeDialog } from "./ui/welcome-dialog";
 export const metadata: Metadata = {
   title: copy.ru.brand,
@@ -22,7 +20,6 @@ export const metadata: Metadata = {
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="ru" suppressHydrationWarning><body>
     {children}
-    <Suspense><OpenInApp /></Suspense>
     <WelcomeDialog />
   </body></html>;
 }
