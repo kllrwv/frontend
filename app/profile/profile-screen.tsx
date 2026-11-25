@@ -8,7 +8,8 @@ import { NameWithBadge } from "../ui/verified";
 import { Drawing } from "../feed/drawing";
 import { copy, type Lang } from "../lib/locale";
 import { LinkedText } from "../ui/mentions";
-import { readableError, type ProfileView } from "./profile-data";
+import { ProfileConnections } from "./profile-connections";
+import { connectionCount, readableError, type ConnectionDirection, type ProfileView } from "./profile-data";
 export function ProfileHead({ data, lang, revision, edit, changed, blocked, access }: {
   data: ProfileView; lang: Lang; revision: number; edit: () => void; changed: () => void; blocked: () => void; access?: Access;
 }) {
@@ -22,6 +23,7 @@ export function ProfileHead({ data, lang, revision, edit, changed, blocked, acce
   ];
   const input = useRef<HTMLInputElement>(null);
   const [drawing, setDrawing] = useState(false);
+  const [connections, setConnections] = useState<ConnectionDirection | null>(null);
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -100,10 +102,14 @@ export function ProfileHead({ data, lang, revision, edit, changed, blocked, acce
     <h1>{data.verified ? <NameWithBadge name={data.name} lang={lang} size={24} /> : data.name}</h1>
     <p className="profile-handle">@{data.username}</p>
     {data.bio && <p className="profile-bio"><LinkedText value={data.bio} /></p>}
-    <dl className="profile-facts">
-      <div><dt>{t.followers}</dt><dd>{number.format(data.followers)}</dd></div>
-      <div><dt>{t.following}</dt><dd>{number.format(data.following)}</dd></div>
-    </dl>
+    <div className="profile-facts">
+      {(["followers", "following"] as const).map(direction => {
+        const count = data[direction];
+        const label = <><strong>{number.format(count)}</strong>{" "}{connectionCount(lang, direction, count)}</>;
+        return data.deleted ? <span key={direction} className="profile-count">{label}</span> :
+          <button key={direction} type="button" className="profile-count" aria-haspopup="dialog" onClick={() => setConnections(direction)}>{label}</button>;
+      })}
+    </div>
     <p className="profile-dates">{t.joined.replace("{date}", joined)}{presence && <span>{presence}</span>}</p>
     {data.deleted && <p className="removed-caption">{mod.deletedAccount}</p>}
     {moderation && <ContentDialog targets={[
@@ -111,6 +117,8 @@ export function ProfileHead({ data, lang, revision, edit, changed, blocked, acce
       ...(moderation === "report" || access?.moderate ? mediaTargets : []),
     ]} lang={lang} mode={moderation} close={() => setModeration(null)} changed={changed}/>}
     {error && <p className="social-error" role="alert">{error}</p>}
+    {connections && <ProfileConnections accountId={data.id} direction={connections} lang={lang}
+      close={() => setConnections(null)} changed={changed} />}
     {drawing && <Drawing lang={lang} banner close={() => setDrawing(false)} attach={file => {
       setDrawing(false);
       void upload(file);

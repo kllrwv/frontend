@@ -16,6 +16,12 @@ export type Preferences = {
   notice_preferences: Partial<Record<NoticePreference, boolean>>;
 };
 export type Blocked = { id: string; name: string; username: string };
+export type ConnectionDirection = "followers" | "following";
+export function connectionCount(lang: Lang, direction: ConnectionDirection, count: number) {
+  const plural = new Intl.PluralRules(lang).select(count);
+  const labels = copy[lang].profiles.connectionCounts[direction];
+  return labels[plural === "one" || plural === "few" ? plural : "other"];
+}
 export function readableError(lang: Lang, cause: unknown) {
   const errors = copy[lang].errors;
   return (cause instanceof ApiError && errors[cause.message as keyof typeof errors]) || errors.unavailable;

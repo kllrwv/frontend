@@ -450,6 +450,11 @@
         "edit": "редактировать",
         "followers": "подписчики",
         "following": "подписки",
+        "connectionCounts": {
+          "followers": { "one": "подписчик", "few": "подписчика", "other": "подписчиков" },
+          "following": { "one": "подписка", "few": "подписки", "other": "подписок" }
+        },
+        "connectionEmpty": { "followers": "подписчиков пока нет", "following": "подписок пока нет" },
         "joined": "с {date}",
         "online": "онлайн",
         "seen": "был(а) в сети {date}",
@@ -1449,6 +1454,11 @@
         "edit": "edit",
         "followers": "followers",
         "following": "following",
+        "connectionCounts": {
+          "followers": { "one": "follower", "few": "followers", "other": "followers" },
+          "following": { "one": "following", "few": "following", "other": "following" }
+        },
+        "connectionEmpty": { "followers": "no followers yet", "following": "no accounts followed yet" },
         "joined": "joined {date}",
         "online": "online",
         "seen": "last seen {date}",
