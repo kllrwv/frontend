@@ -268,6 +268,8 @@
         "name_invalid": "введи имя длиной от 1 до 80 символов.",
         "username_invalid": "нужно 3–54 символа: латиница, русский алфавит, цифры, - и _.",
         "username_taken": "этот юзернейм уже занят.",
+        "push_unavailable": "веб-пуши пока недоступны.",
+        "push_disconnected": "сначала подключи уведомления на этом устройстве.",
         "username_reserved": "этот адрес занят разделом сайта.",
         "alias_missing": "дополнительный юзернейм не найден.",
         "aliases_limit": "на аккаунт можно выдать не больше 72 дополнительных юзернеймов.",
@@ -445,6 +447,25 @@
       "profiles": {
         "profile": "профиль",
         "notifications": "уведомления",
+        "push": {
+          "title": "уведомления на устройстве",
+          "hint": "пуши приходят, даже когда сайт закрыт. виды уведомлений настраиваются для всего аккаунта.",
+          "install": "на iphone и ipad добавь сайт на экран «домой», открой его с иконки и включи уведомления здесь.",
+          "unsupported": "этот браузер не поддерживает веб-пуши. на android попробуй chrome.",
+          "unavailable": "отправка пушей на сервере пока недоступна.",
+          "denied": "уведомления заблокированы. разреши их в настройках устройства или браузера.",
+          "connected": "пуши включены на этом устройстве.",
+          "enable": "подключить на этом устройстве",
+          "disable": "отключить на этом устройстве",
+          "test": "прислать тестовый пуш",
+          "testQueued": "тестовый пуш поставлен в очередь.",
+          "kinds": {
+            "activity": { "title": "события в аккаунте", "hint": "подписки на тебя, лайки, комментарии, записи на стене и упоминания по настройкам ниже." },
+            "following": { "title": "новые посты из подписок", "hint": "когда кто-то, на кого ты подписан, публикует пост." },
+            "recommendations": { "title": "интересные посты", "hint": "по подпискам и тому, что тебе понравилось. не чаще раза в два дня." },
+            "reminders": { "title": "напоминания вернуться", "hint": "если тебя не было от четырёх дней. не чаще раза в неделю." }
+          }
+        },
         "wallPosts": "посты",
         "likedPosts": "лайки",
         "wallEmpty": "на стене пока пусто",
@@ -789,6 +810,27 @@
         "issued": "передано в telegram",
         "eventTime": "когда"
       }
+    },
+    "webPush": {
+      "events": {
+        "follow": { "title": "новый подписчик", "body": "на тебя подписался аккаунт {name}" },
+        "wall": { "title": "пост на твоей стене", "body": "{name} оставил(а) запись на твоей стене" },
+        "like": { "title": "новый лайк", "body": "{name} поставил(а) лайк твоей записи" },
+        "reply": { "title": "новый ответ", "body": "{name} ответил(а) на твою запись" },
+        "mention": { "title": "тебя упомянули", "body": "{name} упомянул(а) тебя в публикации" },
+        "profile_mention": { "title": "упоминание в профиле", "body": "{name} упомянул(а) тебя в описании профиля" },
+        "following": { "title": "новый пост из подписок", "body": "{name} опубликовал(а) пост" },
+        "recommendations": { "title": "пост для тебя", "body": "публикация от {name}" },
+        "test": { "title": "тестовое уведомление", "body": "веб-пуши killerwave работают на этом устройстве" }
+      },
+      "reminders": [
+        { "title": "заглянешь в killerwave?", "body": "лента и подписки на месте, когда захочешь вернуться" },
+        { "title": "минутка для ленты", "body": "открой killerwave, если хочется почитать" },
+        { "title": "давно не виделись", "body": "загляни в killerwave, когда будет удобно" },
+        { "title": "мы тут", "body": "можно открыть ленту или поделиться чем-то своим" },
+        { "title": "что у тебя нового?", "body": "заходи в killerwave, если есть чем поделиться" },
+        { "title": "пауза на чтение", "body": "если хочется, полистай посты из подписок" }
+      ]
     },
     "email": {
       "subject": "код для killerwave",
@@ -1302,6 +1344,8 @@
         "name_invalid": "enter a name with 1–80 characters.",
         "username_invalid": "use 3–54 characters: latin or russian letters, digits, - and _.",
         "username_taken": "that username is taken.",
+        "push_unavailable": "web push is currently unavailable.",
+        "push_disconnected": "connect notifications on this device first.",
         "username_reserved": "that address is reserved for a page on the site.",
         "alias_missing": "additional username not found.",
         "aliases_limit": "an account can have up to 72 additional usernames.",
@@ -1479,6 +1523,25 @@
       "profiles": {
         "profile": "profile",
         "notifications": "notifications",
+        "push": {
+          "title": "device notifications",
+          "hint": "push notifications can arrive when the site is closed. notification types are set for your whole account.",
+          "install": "on iphone or ipad, add killerwave to the home screen, open it from its icon, then enable notifications here.",
+          "unsupported": "this browser doesn’t support web push. on android, try chrome.",
+          "unavailable": "the server can’t send push notifications right now.",
+          "denied": "notifications are blocked. allow them in your device or browser settings.",
+          "connected": "push notifications are on for this device.",
+          "enable": "connect this device",
+          "disable": "disconnect this device",
+          "test": "send a test notification",
+          "testQueued": "test notification queued.",
+          "kinds": {
+            "activity": { "title": "account activity", "hint": "followers, likes, replies, wall posts, and mentions based on the settings below." },
+            "following": { "title": "new posts from people you follow", "hint": "when someone you follow publishes a post." },
+            "recommendations": { "title": "posts you might like", "hint": "based on your follows and likes. at most once every two days." },
+            "reminders": { "title": "reminders to come back", "hint": "after at least four days away. at most once a week." }
+          }
+        },
         "wallPosts": "posts",
         "likedPosts": "likes",
         "wallEmpty": "no posts on this wall yet",
@@ -1823,6 +1886,27 @@
         "issued": "delivered to telegram",
         "eventTime": "time"
       }
+    },
+    "webPush": {
+      "events": {
+        "follow": { "title": "new follower", "body": "{name} followed you" },
+        "wall": { "title": "post on your wall", "body": "{name} posted on your wall" },
+        "like": { "title": "new like", "body": "{name} liked your post" },
+        "reply": { "title": "new reply", "body": "{name} replied to your post" },
+        "mention": { "title": "you were mentioned", "body": "{name} mentioned you in a post" },
+        "profile_mention": { "title": "profile mention", "body": "{name} mentioned you in their bio" },
+        "following": { "title": "new post from someone you follow", "body": "{name} published a post" },
+        "recommendations": { "title": "a post you might like", "body": "a post from {name}" },
+        "test": { "title": "test notification", "body": "killerwave web push is working on this device" }
+      },
+      "reminders": [
+        { "title": "feel like visiting killerwave?", "body": "your feed and follows are here whenever you feel like coming back" },
+        { "title": "a moment for your feed", "body": "open killerwave if you feel like reading" },
+        { "title": "it’s been a while", "body": "drop by killerwave whenever it suits you" },
+        { "title": "we’re here", "body": "open your feed or share something of your own" },
+        { "title": "what’s new with you?", "body": "drop by killerwave if you have something to share" },
+        { "title": "a reading break", "body": "browse posts from people you follow if you’re in the mood" }
+      ]
     },
     "email": {
       "subject": "your killerwave code",

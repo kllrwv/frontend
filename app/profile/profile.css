@@ -104,6 +104,9 @@
   .settings-row p, .settings-form p { @apply mt-1 text-sm leading-relaxed text-muted; }
   .settings-row p { @apply break-all; }
   .settings-form p { overflow-wrap: anywhere; text-wrap: pretty; }
+  .settings-push { @apply rounded-md border border-solid border-rule bg-stage p-3; }
+  .settings-push-hint { @apply text-sm leading-relaxed text-muted; }
+  .settings-push-actions { @apply flex flex-wrap gap-2; }
   .settings-row input[type="checkbox"] { @apply size-6 shrink-0 cursor-pointer accent-signal; }
   .settings-avatar { @apply justify-start; }
   .settings-avatar > div { @apply flex flex-wrap items-center gap-2; }

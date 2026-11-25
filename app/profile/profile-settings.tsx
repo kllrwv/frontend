@@ -7,6 +7,7 @@ import { Dialog } from "../ui/dialog";
 import { copy, type Lang } from "../lib/locale";
 import { MentionField } from "../ui/mentions";
 import { SecuritySettings } from "./security-settings";
+import { PushSettings } from "./push-settings";
 import { readableError, useResource, type Audience, type Blocked, type NoticePreference, type Owner, type Preferences, type ProfileView, type Theme } from "./profile-data";
 const sections = { account: UserRound, aliases: Link2, appearance: Palette, security: Shield, privacy: Users, notifications: Bell };
 type Section = keyof typeof sections;
@@ -122,7 +123,8 @@ export function ProfileSettings({ user, lang, close, saved, refreshProfile, them
                 await api(`accounts/${person.id}/block`, { enabled: false }); blockList.reload();
               })}>{t.unblock}</button>
             </li>)}</ul>}
-        </div> : <div className="settings-stack">{(Object.keys(noticeKeys) as NoticePreference[]).map(kind =>
+        </div> : <div className="settings-stack"><PushSettings lang={lang} notificationsEnabled={preferences.notice_preferences.all !== false} />
+          {(Object.keys(noticeKeys) as NoticePreference[]).map(kind =>
           <label className="settings-row" key={kind}><span>{t[noticeKeys[kind]]}</span>
             <input type="checkbox" role="switch" checked={preferences.notice_preferences[kind] ?? kind !== "sound"}
               disabled={busy || (kind !== "all" && preferences.notice_preferences.all === false)}
